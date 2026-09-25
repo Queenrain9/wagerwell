@@ -20,29 +20,232 @@ function save(){store();wallet();renderHistory();renderCauses();}
 function expense(n){if(!Number.isSafeInteger(n)||n<UNIT||n%UNIT!==0||n>s.coins){showToast("모든 금액은 1,000 C 단위로 사용할 수 있어요.");return false;}s.coins-=n;return true;}
 function amount(){let n=Number(el("betInput")?.value);if(!Number.isSafeInteger(n)||n<UNIT||n>1000000||n%UNIT!==0){showToast("금액은 1,000~1,000,000 C 범위에서 1,000 C 단위로 입력하세요.");return null;}return n;}
 function pay(n){s.coins=Math.min(1e9,s.coins+toUnit(n));}
-function betControl(label="BET AMOUNT"){return '<div class="modal-balance"><span>AVAILABLE COINS</span><strong>ⓒ <span id="modalCoins">'+fmt(s.coins)+'</span></strong></div><div class="bet-row"><label>'+label+'<input id="betInput" aria-label="베팅 금액" type="number" min="1000" max="1000000" step="1000" value="'+Math.min(1000,Math.max(1000,s.coins))+'"></label><button class="quick" data-bet="1000">1,000</button><button class="quick" data-bet="5000">5,000</button><button class="quick" data-bet="max">MAX</button></div>';}
+function betControl(label="BET AMOUNT"){
+  const presets=[1000,5000,10000,50000];
+  return '<div class="game-bankbar"><div class="modal-balance"><span>AVAILABLE</span><strong>ⓒ <span id="modalCoins">'+fmt(s.coins)+'</span></strong></div>'+
+    '<div class="game-bet-control"><label>'+label+'<input id="betInput" aria-label="베팅 금액" type="number" min="1000" max="1000000" step="1000" value="'+Math.min(1000,Math.max(1000,s.coins))+'"></label>'+
+    '<div class="chip-row">'+presets.map(n=>'<button class="quick chip-btn" data-bet="'+n+'">'+fmt(n)+'</button>').join('')+'<button class="quick chip-btn max" data-bet="max">MAX</button></div></div></div>';
+}
 function syncModalCoins(){if(el("modalCoins"))el("modalCoins").textContent=fmt(s.coins);}
 function result(msg){if(el("result"))el("result").textContent=msg;}
-function open(title,kicker,html,type){modalType=type;el("modalTitle").textContent=title;el("modalKicker").textContent=kicker;el("modalBody").innerHTML=html;el("modal").classList.remove("hidden");el("modal").setAttribute("aria-hidden","false");el("closeModal").focus();}
-function close(){el("modal").classList.add("hidden");el("modal").setAttribute("aria-hidden","true");modalType="";bj=null;}
+function open(title,kicker,html,type){
+  modalType=type;
+  el("modalTitle").textContent=title;
+  el("modalKicker").textContent=kicker;
+  el("modalBody").innerHTML=html;
+  const dialog=el("modal").querySelector(".dialog");
+  dialog.className="dialog"+(type&&["slots","baccarat","blackjack","roulette"].includes(type)?" game-dialog game-"+type:"");
+  el("modal").classList.remove("hidden");
+  el("modal").setAttribute("aria-hidden","false");
+  el("closeModal").focus();
+}
+function close(){
+  el("modal").classList.add("hidden");
+  el("modal").setAttribute("aria-hidden","true");
+  const dialog=el("modal").querySelector(".dialog");
+  dialog.className="dialog";
+  modalType="";
+  bj=null;
+}
 function recordGame(name,stake,payout,detail){const paid=toUnit(payout);pay(paid);log(name,paid-stake,detail);save();syncModalCoins();}
 function renderHistory(){const root=el("historyList");root.innerHTML="";if(!s.history.length){const p=document.createElement("p");p.className="hint";p.textContent="아직 거래 기록이 없습니다. 게임을 플레이하거나 광고 배너에 코인을 사용해 보세요.";root.append(p);return;}s.history.slice(0,8).forEach(h=>{const row=document.createElement("div");row.className="ledger-row";const left=document.createElement("div");const b=document.createElement("b");b.textContent=String(h.title||"GAME");const sm=document.createElement("small");sm.textContent=String(h.ts||"")+" · "+String(h.detail||"");left.append(b,sm);const val=document.createElement("strong");val.className=h.delta<0?"negative":"";val.textContent=(h.delta>=0?"+":"")+fmt(h.delta)+" C";row.append(left,val);root.append(row);});}
 function renderCauses(){const root=el("causeGrid");root.innerHTML="";causes.forEach(c=>{const progress=Math.min(c.target,c.base+s.donations[c.id]),pct=Math.round(progress/c.target*100);const card=document.createElement("button");card.className="cause-card";card.dataset.cause=String(c.id);card.innerHTML='<div class="cause-cover '+c.style+'"><span>'+c.emoji+'</span><div><small>'+c.tag+'</small><b>'+c.title+'</b></div></div><div class="cause-meta"><div><span>PROJECT FUNDING</span><b>'+fmt(progress)+' / '+fmt(c.target)+' C</b></div><div class="progress"><span style="width:'+pct+'%"></span></div><small>'+(pct>=100?"프로젝트 목표 달성 ✓":"달성률 "+pct+"% · 후원하기 ↗")+'</small></div>';root.append(card);});}
 function claim(){const today=new Date().toLocaleDateString("en-CA");let n=0;if(s.coins<1000){n=3000;}else if(s.claimed!==today){n=3000;s.claimed=today;}else{showToast("오늘의 무료 코인은 이미 받았어요. 잔액이 1,000 미만이면 구제 코인을 받을 수 있어요.");return;}pay(n);log("무료 코인",n,"DAILY BONUS");save();showToast(fmt(n)+" 코인이 지급됐어요.");}
 function openCause(id){const c=causes[id];if(!c)return;currentCause=id;const progress=Math.min(c.target,c.base+s.donations[id]);const remaining=c.target-progress;open(c.title,"SPECIAL EVENT / "+c.tag,betControl("SUPPORT COINS")+'<div class="cause-detail-icon">'+c.emoji+'</div><h3 class="cause-detail-title">'+c.title+'</h3><p class="cause-description">'+c.desc+'</p><div class="cause-amount"><span>현재 진행액</span><span>'+fmt(progress)+' / '+fmt(c.target)+' C</span></div><div class="progress"><span style="width:'+(progress/c.target*100)+'%"></span></div><div class="action-row"><button id="donateBtn" class="play-btn" '+(!remaining?"disabled":"")+'>코인 보내기 ↗</button></div><div id="result" class="result">'+(remaining?"남은 목표 "+fmt(remaining)+" C":"목표 달성! 다른 프로젝트를 찾아보세요.")+'</div>',"cause");const inp=el("betInput");inp.max=Math.max(UNIT,remaining);inp.step=UNIT;inp.min=UNIT;inp.value=Math.min(UNIT,Math.max(UNIT,remaining),Math.max(UNIT,s.coins));el("donateBtn").onclick=()=>{const requested=amount();if(!requested)return;const room=Math.max(0,c.target-c.base-s.donations[id]);if(!room){showToast("이미 달성한 프로젝트입니다.");return;}const n=Math.min(requested,toUnit(room));if(n<UNIT||!expense(n))return;s.donations[id]+=n;s.total+=n;s.count+=1;log(c.title,-n,"EVENT SUPPORT");save();showToast(fmt(n)+" 코인으로 참여했어요.");openCause(id);};}
-function openSlots(){open("LUCKY 777","GAME 01 / SLOTS",betControl()+'<div class="reels"><div class="reel" id="reel0">7</div><div class="reel" id="reel1">7</div><div class="reel" id="reel2">7</div></div><div class="action-row"><button id="spin" class="play-btn">SPIN ▶</button></div><div id="result" class="result">세 칸이 같으면 당첨! 777 = 25배 · 🍒🍒🍒 = 12배 · 기타 3개 = 6배 · 체리 2개 = 2배</div><p class="hint">배당은 원금을 포함한 지급액입니다. 각 기호는 동일 확률로 등장합니다.</p>',"slots");el("spin").onclick=()=>{const n=amount();if(!n||!expense(n))return;const symbols=["7","🍒","🍋","🔔","⭐","🍀"];const rr=[0,1,2].map(()=>symbols[Math.floor(Math.random()*symbols.length)]);rr.forEach((v,i)=>el("reel"+i).textContent=v);let x=0;if(rr.every(v=>v==="7"))x=25;else if(rr.every(v=>v==="🍒"))x=12;else if(rr.every(v=>v===rr[0]))x=6;else if(rr.filter(v=>v==="🍒").length===2)x=2;const prize=n*x;recordGame("LUCKY 777",n,prize,rr.join(" "));result(x?"당첨! "+fmt(prize)+"코인이 지급됐어요. (x"+x+")":"이번엔 미당첨. 다음 기회를 노려보세요.");};}
+function openSlots(){
+  const recent=[];
+  const symbols=["7","🍒","🔔","⭐","🍋","♣"];
+  const makeStrip=()=>Array.from({length:5},(_,i)=>'<div class="slot-reel" id="slotReel'+i+'"><span>🍒</span><b>7</b><span>⭐</span></div>').join("");
+  open("LUCKY 777","WAGERWELL SLOT · GAME 01",
+    '<div class="game-statusbar"><span><i class="live-dot"></i> SLOT SERVER 01</span><b>LUCKY 777</b><em>MEGA JACKPOT 42,318,000 C</em></div>'+
+    '<div class="slot-machine-pro">'+
+      '<div class="slot-marquee"><span>★ HOT GAME ★</span><b>LUCKY 777</b><small>5 REEL · CENTER LINE</small></div>'+
+      '<div class="slot-screen"><div class="slot-payline"></div>'+makeStrip()+'</div>'+
+      '<div class="slot-paytable-mini"><span><b>777</b> 25x</span><span><b>🍒🍒🍒</b> 12x</span><span><b>3 MATCH</b> 6x</span><span><b>2 CHERRY</b> 2x</span></div>'+
+    '</div>'+
+    betControl("BET")+
+    '<div class="game-actionbar"><button id="spin" class="play-btn main-spin">SPIN</button><button class="quick auto-btn" type="button">AUTO</button><button class="quick" type="button">PAYTABLE</button></div>'+
+    '<div class="game-info-grid"><div><small>LAST WIN</small><b id="slotLastWin">0 C</b></div><div><small>BET</small><b id="slotBetView">1,000 C</b></div><div><small>WIN RATE</small><b>LIVE</b></div></div>'+
+    '<div class="recent-panel"><div class="recent-head"><b>RECENT SPINS</b><span>실시간 기록</span></div><div id="slotRecent" class="recent-strip"><i>—</i><i>—</i><i>—</i><i>—</i><i>—</i></div></div>'+
+    '<div id="result" class="result casino-result">베팅 금액을 선택하고 SPIN을 누르세요.</div>'
+  ,"slots");
+  const input=el("betInput");
+  const syncBet=()=>{if(el("slotBetView"))el("slotBetView").textContent=fmt(Number(input.value)||0)+" C";};
+  input.addEventListener("input",syncBet);syncBet();
+  el("spin").onclick=()=>{
+    const n=amount();if(!n||!expense(n))return;
+    const center=Array.from({length:5},()=>symbols[Math.floor(Math.random()*symbols.length)]);
+    center.forEach((v,i)=>{
+      const reel=el("slotReel"+i);
+      const a=symbols[Math.floor(Math.random()*symbols.length)],c=symbols[Math.floor(Math.random()*symbols.length)];
+      reel.classList.remove("spinning");void reel.offsetWidth;reel.classList.add("spinning");
+      reel.innerHTML='<span>'+a+'</span><b>'+v+'</b><span>'+c+'</span>';
+    });
+    const first3=center.slice(0,3);
+    let x=0;
+    if(first3.every(v=>v==="7"))x=25;
+    else if(first3.every(v=>v==="🍒"))x=12;
+    else if(first3.every(v=>v===first3[0]))x=6;
+    else if(first3.filter(v=>v==="🍒").length>=2)x=2;
+    const prize=n*x;
+    recent.unshift(first3.join(" "));if(recent.length>5)recent.pop();
+    recordGame("LUCKY 777",n,prize,center.join(" "));
+    el("slotLastWin").textContent=fmt(prize)+" C";
+    el("slotRecent").innerHTML=Array.from({length:5},(_,i)=>'<i>'+(recent[i]||"—")+'</i>').join("");
+    result(x?"WIN · "+fmt(prize)+" C · x"+x:"NO WIN · NEXT SPIN");
+  };
+}
 const rank=card=>Math.min(10,card.r);function deck(){const cards=[];for(let d=0;d<4;d++)for(let r=1;r<=13;r++)cards.push({r,s:["♠","♥","♦","♣"][d]});for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}return cards;}
 function handTotal(h){let v=0,a=0;h.forEach(c=>{v+=c.r===1?11:rank(c);if(c.r===1)a++;});while(v>21&&a){v-=10;a--;}return v;}
 function cardsHtml(hand,hide=false){return hand.map((c,i)=>hide&&i===1?'<span class="card back">WW</span>':'<span class="card '+(c.s==="♥"||c.s==="♦"?"red":"")+'">'+(["A","2","3","4","5","6","7","8","9","10","J","Q","K"][c.r-1])+c.s+'</span>').join("");}
-function bjView(){const running=bj&&bj.active;let html=betControl()+'<div class="table-felt"><small>DEALER '+(bj?(running?"?":handTotal(bj.dealer)):"—")+'</small><div class="hand" id="dealerHand">'+(bj?cardsHtml(bj.dealer,running):'<span class="hint">대기 중</span>')+'</div><small>PLAYER '+(bj?handTotal(bj.player):"—")+'</small><div class="hand" id="playerHand">'+(bj?cardsHtml(bj.player):'<span class="hint">카드를 받으세요</span>')+'</div></div><div class="action-row">'+(running?'<button class="play-btn" id="hit">HIT +</button><button class="quick" id="stand">STAND ■</button>':'<button class="play-btn" id="deal">DEAL CARDS ▶</button>')+'</div><div id="result" class="result">'+(bj?bj.message:"21에 가까운 패로 딜러를 이겨 보세요. 딜러는 소프트 17을 포함해 17 이상에서 스탠드합니다.")+'</div><p class="hint">일반 승리 1:1 · 내추럴 블랙잭 3:2 · 무승부는 원금 반환. 한 판당 1~1,000,000 C.</p>';el("modalBody").innerHTML=html;if(running){el("betInput").disabled=true;el("hit").onclick=()=>{bj.player.push(bj.cards.pop());if(handTotal(bj.player)>21)finishBJ();else bjView();};el("stand").onclick=finishBJ;}else el("deal").onclick=startBJ;}
-function openBlackjack(){bj=null;open("BLACKJACK","GAME 03 / TABLE","", "blackjack");bjView();}
-function startBJ(){const n=amount();if(!n||!expense(n))return;const cards=deck();bj={bet:n,cards,player:[cards.pop(),cards.pop()],dealer:[cards.pop(),cards.pop()],active:true,message:"카드를 더 받을까요?"};save();if(handTotal(bj.player)===21||handTotal(bj.dealer)===21)finishBJ();else bjView();}
-function finishBJ(){if(!bj||!bj.active)return;bj.active=false;const pt=handTotal(bj.player);let dt=handTotal(bj.dealer);const naturalP=bj.player.length===2&&pt===21,naturalD=bj.dealer.length===2&&dt===21;if(pt<=21&&!naturalP&&!naturalD)while(dt<17){bj.dealer.push(bj.cards.pop());dt=handTotal(bj.dealer);}let prize=0,label="패배";if(pt>21){label="버스트! 패배";}else if(naturalP&&!naturalD){prize=toUnit(bj.bet*2.5);label="BLACKJACK! 3:2 승리";}else if(naturalD&&!naturalP){label="딜러 블랙잭";}else if(pt===dt){prize=bj.bet;label="PUSH · 무승부";}else if(dt>21||pt>dt){prize=bj.bet*2;label="승리!";}bj.message=label+" | PLAYER "+pt+" : DEALER "+dt+" | 지급 "+fmt(prize)+" C";recordGame("BLACKJACK",bj.bet,prize,bj.message);bjView();}
+function bjView(){
+  const running=bj&&bj.active;
+  const dealerTotal=bj?(running?"?":handTotal(bj.dealer)):"—";
+  const playerTotal=bj?handTotal(bj.player):"—";
+  let html=
+    '<div class="game-statusbar"><span><i class="live-dot"></i> TABLE 03</span><b>BLACKJACK</b><em>DEALER STAND 17 · BLACKJACK 3:2</em></div>'+
+    '<div class="bj-pro-table">'+
+      '<div class="bj-dealer-stage"><div class="dealer-avatar">WW</div><div><small>DEALER</small><b>WAGERWELL TABLE</b><em>SHOE '+(bj?Math.max(12,Math.round(bj.cards.length/52*100)):100)+'%</em></div></div>'+
+      '<div class="bj-felt-zone dealer-zone"><div class="zone-label"><span>DEALER</span><b>'+dealerTotal+'</b></div><div class="hand" id="dealerHand">'+(bj?cardsHtml(bj.dealer,running):'<span class="table-wait">WAITING FOR BET</span>')+'</div></div>'+
+      '<div class="bj-felt-zone player-zone"><div class="zone-label"><span>PLAYER</span><b>'+playerTotal+'</b></div><div class="hand" id="playerHand">'+(bj?cardsHtml(bj.player):'<span class="table-wait">PLACE YOUR BET</span>')+'</div></div>'+
+    '</div>'+
+    betControl("BET")+
+    '<div class="game-actionbar bj-actions">'+
+      (running?'<button class="play-btn" id="hit">HIT</button><button class="quick danger" id="stand">STAND</button>':'<button class="play-btn" id="deal">DEAL CARDS</button>')+
+    '</div>'+
+    '<div class="game-info-grid"><div><small>PLAYER</small><b>'+playerTotal+'</b></div><div><small>DEALER</small><b>'+dealerTotal+'</b></div><div><small>MIN BET</small><b>1,000 C</b></div></div>'+
+    '<div id="result" class="result casino-result">'+(bj?bj.message:"베팅 후 DEAL CARDS를 누르세요.")+'</div>';
+  el("modalBody").innerHTML=html;
+  if(running){
+    el("betInput").disabled=true;
+    el("hit").onclick=()=>{bj.player.push(bj.cards.pop());if(handTotal(bj.player)>21)finishBJ();else bjView();};
+    el("stand").onclick=finishBJ;
+  }else el("deal").onclick=startBJ;
+}
+function openBlackjack(){bj=null;open("BLACKJACK","WAGERWELL TABLE · GAME 03","", "blackjack");bjView();}
+function startBJ(){
+  const n=amount();if(!n||!expense(n))return;
+  const cards=deck();bj={bet:n,cards,player:[cards.pop(),cards.pop()],dealer:[cards.pop(),cards.pop()],active:true,message:"PLAYER ACTION · HIT OR STAND"};
+  save();
+  if(handTotal(bj.player)===21||handTotal(bj.dealer)===21)finishBJ();else bjView();
+}
+function finishBJ(){
+  if(!bj||!bj.active)return;
+  bj.active=false;
+  const pt=handTotal(bj.player);let dt=handTotal(bj.dealer);
+  const naturalP=bj.player.length===2&&pt===21,naturalD=bj.dealer.length===2&&dt===21;
+  if(pt<=21&&!naturalP&&!naturalD)while(dt<17){bj.dealer.push(bj.cards.pop());dt=handTotal(bj.dealer);}
+  let prize=0,label="LOSE";
+  if(pt>21){label="BUST";}
+  else if(naturalP&&!naturalD){prize=toUnit(bj.bet*2.5);label="BLACKJACK";}
+  else if(naturalD&&!naturalP){label="DEALER BLACKJACK";}
+  else if(pt===dt){prize=bj.bet;label="PUSH";}
+  else if(dt>21||pt>dt){prize=bj.bet*2;label="WIN";}
+  bj.message=label+" · PLAYER "+pt+" / DEALER "+dt+" · PAY "+fmt(prize)+" C";
+  recordGame("BLACKJACK",bj.bet,prize,bj.message);bjView();
+}
 function baccaratScore(h){return h.reduce((n,c)=>n+(c.r===1?1:c.r>=10?0:c.r),0)%10;}
 function baccaratRound(cards){const p=[cards.pop(),cards.pop()],b=[cards.pop(),cards.pop()];const p2=baccaratScore(p),b2=baccaratScore(b);if(p2>=8||b2>=8)return{p,b,pScore:p2,bScore:b2};let third=null;if(p2<=5){third=cards.pop();p.push(third);}if(third===null){if(b2<=5)b.push(cards.pop());}else{const x=third.r===1?1:third.r>=10?0:third.r;if(b2<=2||(b2===3&&x!==8)||(b2===4&&x>=2&&x<=7)||(b2===5&&x>=4&&x<=7)||(b2===6&&(x===6||x===7)))b.push(cards.pop());}return{p,b,pScore:baccaratScore(p),bScore:baccaratScore(b)};}
-function openBaccarat(){baccaratResult=null;open("BACCARAT","GAME 02 / TABLE",betControl()+'<div class="choices"><button class="choice selected" data-side="player">PLAYER · 2.00x</button><button class="choice" data-side="banker">BANKER · 1.95x</button><button class="choice" data-side="tie">TIE · 9.00x</button></div><div class="table-felt"><small>PLAYER <span id="pScore">—</span></small><div class="hand" id="pCards"><span class="hint">카드 대기</span></div><small>BANKER <span id="bScore">—</span></small><div class="hand" id="bCards"><span class="hint">카드 대기</span></div></div><div class="action-row"><button id="bacDeal" class="play-btn">DEAL ▶</button></div><div id="result" class="result">플레이어 / 뱅커 / 타이 중 하나를 선택하세요.</div><p class="hint">플레이어·뱅커 베팅 시 타이는 원금 반환. 뱅커 승리 배당 1.95배(수수료 5%). 뱅커의 세 번째 카드는 정식 규칙을 따릅니다.</p>',"baccarat");let choice="player";el("modalBody").querySelectorAll("[data-side]").forEach(btn=>btn.onclick=()=>{choice=btn.dataset.side;el("modalBody").querySelectorAll("[data-side]").forEach(x=>x.classList.toggle("selected",x===btn));});el("bacDeal").onclick=()=>{const n=amount();if(!n||!expense(n))return;const r=baccaratRound(deck());el("pCards").innerHTML=cardsHtml(r.p);el("bCards").innerHTML=cardsHtml(r.b);el("pScore").textContent=r.pScore;el("bScore").textContent=r.bScore;const winner=r.pScore===r.bScore?"tie":r.pScore>r.bScore?"player":"banker";let prize=0;if(winner===choice)prize=choice==="tie"?n*9:choice==="banker"?toUnit(n*1.95):n*2;else if(winner==="tie"&&choice!=="tie")prize=n;recordGame("BACCARAT",n,prize,"PLAYER "+r.pScore+" : BANKER "+r.bScore+" / "+winner.toUpperCase());result((winner===choice?"당첨!":winner==="tie"&&choice!=="tie"?"타이 · 원금 반환":"미당첨")+" | 결과 "+winner.toUpperCase()+" | 지급 "+fmt(prize)+" C");};}
+function openBaccarat(){
+  baccaratResult=null;
+  const road=[];
+  const renderRoad=()=>el("bacRoad")&&(el("bacRoad").innerHTML=Array.from({length:36},(_,i)=>{
+    const r=road[i];return r?'<i class="'+r+'">'+(r==="player"?"P":r==="banker"?"B":"T")+'</i>':'<i></i>';
+  }).join(""));
+  open("BACCARAT","WAGERWELL LIVE · TABLE 02",
+    '<div class="game-statusbar"><span><i class="live-dot"></i> TABLE 02 · LIVE</span><b>WAGERWELL BACCARAT</b><em>1,248 WATCHING · SHOE 63%</em></div>'+
+    '<div class="baccarat-live-stage">'+
+      '<div class="live-video-panel"><div class="live-video-overlay"><span>LIVE</span><small>DEALER CAM 01</small></div><div class="dealer-silhouette"><i></i></div><div class="video-bottom"><b>SPEED BACCARAT</b><em>NO. 2048</em></div></div>'+
+      '<div class="baccarat-side-stats"><div><small>PLAYER</small><b class="blue-txt">47%</b></div><div><small>BANKER</small><b class="red-txt">49%</b></div><div><small>TIE</small><b class="green">4%</b></div><div><small>ROUND</small><b>218</b></div></div>'+
+    '</div>'+
+    '<div class="baccarat-board">'+
+      '<div class="bac-hand player-hand"><div class="bac-label"><span>PLAYER</span><b id="pScore">—</b></div><div class="hand" id="pCards"><span class="table-wait">CARD WAIT</span></div></div>'+
+      '<div class="bac-hand banker-hand"><div class="bac-label"><span>BANKER</span><b id="bScore">—</b></div><div class="hand" id="bCards"><span class="table-wait">CARD WAIT</span></div></div>'+
+    '</div>'+
+    '<div class="bac-bet-zones">'+
+      '<button class="choice bac-zone player selected" data-side="player"><small>PLAYER</small><b>2.00x</b><em>BET</em></button>'+
+      '<button class="choice bac-zone tie" data-side="tie"><small>TIE</small><b>9.00x</b><em>BET</em></button>'+
+      '<button class="choice bac-zone banker" data-side="banker"><small>BANKER</small><b>1.95x</b><em>BET</em></button>'+
+    '</div>'+
+    betControl("BET AMOUNT")+
+    '<div class="game-actionbar"><button id="bacDeal" class="play-btn deal-wide">DEAL</button><button class="quick">REBET</button><button class="quick">DOUBLE</button></div>'+
+    '<div class="baccarat-road-panel"><div class="recent-head"><b>BEAD ROAD</b><span>최근 결과</span></div><div id="bacRoad" class="bac-road-grid"></div></div>'+
+    '<div id="result" class="result casino-result">PLAYER / TIE / BANKER 중 하나를 선택하세요.</div>'
+  ,"baccarat");
+  let choice="player";
+  renderRoad();
+  el("modalBody").querySelectorAll("[data-side]").forEach(btn=>btn.onclick=()=>{
+    choice=btn.dataset.side;
+    el("modalBody").querySelectorAll("[data-side]").forEach(x=>x.classList.toggle("selected",x===btn));
+  });
+  el("bacDeal").onclick=()=>{
+    const n=amount();if(!n||!expense(n))return;
+    const r=baccaratRound(deck());
+    el("pCards").innerHTML=cardsHtml(r.p);el("bCards").innerHTML=cardsHtml(r.b);
+    el("pScore").textContent=r.pScore;el("bScore").textContent=r.bScore;
+    const winner=r.pScore===r.bScore?"tie":r.pScore>r.bScore?"player":"banker";
+    let prize=0;
+    if(winner===choice)prize=choice==="tie"?n*9:choice==="banker"?toUnit(n*1.95):n*2;
+    else if(winner==="tie"&&choice!=="tie")prize=n;
+    road.unshift(winner);if(road.length>36)road.pop();renderRoad();
+    recordGame("BACCARAT",n,prize,"PLAYER "+r.pScore+" : BANKER "+r.bScore+" / "+winner.toUpperCase());
+    result((winner===choice?"WIN":winner==="tie"&&choice!=="tie"?"PUSH":"LOSE")+" · "+winner.toUpperCase()+" · PAY "+fmt(prize)+" C");
+  };
+}
 const redNums=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);const colorOf=n=>n===0?"green":redNums.has(n)?"red":"black";
-function openRoulette(){open("ROULETTE","GAME 04 / TABLE",betControl()+'<div class="choices"><button class="choice selected" data-roulette="red">RED · 2x</button><button class="choice" data-roulette="black">BLACK · 2x</button><button class="choice" data-roulette="number">SINGLE NUMBER · 36x</button></div><label id="numberBox" class="hint" style="display:none">0~36 중 하나 선택 <input id="targetNumber" type="number" min="0" max="36" value="7" style="display:block;margin-top:7px;padding:10px;width:100px;background:#0d1814;border:1px solid #456249;color:#fff"></label><div class="roulette-result" id="rouletteBall">?</div><div class="action-row"><button id="rouletteSpin" class="play-btn">SPIN WHEEL ▶</button></div><div id="result" class="result">유럽식 룰렛 · 0~36 숫자 37개 중 하나가 같은 확률로 등장합니다.</div><p class="hint">RED / BLACK 2배, 단일 숫자 36배 (원금 포함). 초록색 0에서는 색상 베팅이 지게 됩니다.</p>',"roulette");let type="red";el("modalBody").querySelectorAll("[data-roulette]").forEach(btn=>btn.onclick=()=>{type=btn.dataset.roulette;el("numberBox").style.display=type==="number"?"block":"none";el("modalBody").querySelectorAll("[data-roulette]").forEach(x=>x.classList.toggle("selected",x===btn));});el("rouletteSpin").onclick=()=>{const n=amount();if(!n)return;let target=null;if(type==="number"){target=Number(el("targetNumber").value);if(!Number.isInteger(target)||target<0||target>36){showToast("번호는 0~36 중 선택하세요.");return;}}if(!expense(n))return;const ball=Math.floor(Math.random()*37),color=colorOf(ball),win=type==="number"?ball===target:color===type,prize=win?n*(type==="number"?36:2):0;const dot=el("rouletteBall");dot.className="roulette-result "+color;dot.textContent=String(ball);recordGame("ROULETTE",n,prize,"BALL "+ball+" / "+color.toUpperCase());result((win?"당첨!":"미당첨")+" | "+ball+" "+color.toUpperCase()+" | 지급 "+fmt(prize)+" C");};}
+function openRoulette(){
+  const recent=[];
+  const nums=Array.from({length:37},(_,i)=>i);
+  const numberGrid='<div class="roulette-number-grid">'+nums.map(n=>'<button class="roulette-number '+colorOf(n)+'" data-roulette-number="'+n+'">'+n+'</button>').join('')+'</div>';
+  open("ROULETTE","WAGERWELL TABLE · GAME 04",
+    '<div class="game-statusbar"><span><i class="live-dot"></i> EUROPE TABLE 04</span><b>ROULETTE</b><em>684 WATCHING · SINGLE ZERO</em></div>'+
+    '<div class="roulette-pro-stage">'+
+      '<div class="roulette-wheel-pro"><div class="wheel-center"><span id="rouletteBall">?</span></div></div>'+
+      '<div class="roulette-history"><small>RECENT NUMBERS</small><div id="rouletteRecent"><i>32</i><i>15</i><i>19</i><i>4</i><i>0</i><i>21</i></div><b>TABLE 04</b><em>MIN 1,000 C</em></div>'+
+    '</div>'+
+    '<div class="roulette-board-pro">'+numberGrid+
+      '<div class="roulette-outside-bets">'+
+        '<button class="choice selected" data-roulette="red">RED · 2x</button>'+
+        '<button class="choice" data-roulette="black">BLACK · 2x</button>'+
+        '<button class="choice" data-roulette="odd">ODD · 2x</button>'+
+        '<button class="choice" data-roulette="even">EVEN · 2x</button>'+
+        '<button class="choice" data-roulette="low">1–18 · 2x</button>'+
+        '<button class="choice" data-roulette="high">19–36 · 2x</button>'+
+      '</div>'+
+    '</div>'+
+    '<input id="targetNumber" type="hidden" value="7">'+
+    betControl("BET AMOUNT")+
+    '<div class="game-actionbar"><button id="rouletteSpin" class="play-btn deal-wide">SPIN</button><button class="quick">REBET</button><button class="quick">CLEAR</button></div>'+
+    '<div class="game-info-grid"><div><small>TABLE</small><b>EUROPE 04</b></div><div><small>LAST</small><b id="rouletteLast">—</b></div><div><small>MIN BET</small><b>1,000 C</b></div></div>'+
+    '<div id="result" class="result casino-result">베팅 영역 또는 숫자를 선택하세요.</div>'
+  ,"roulette");
+  let type="red",target=null;
+  const clearSelected=()=>el("modalBody").querySelectorAll("[data-roulette],[data-roulette-number]").forEach(x=>x.classList.remove("selected"));
+  el("modalBody").querySelectorAll("[data-roulette]").forEach(btn=>btn.onclick=()=>{
+    type=btn.dataset.roulette;target=null;clearSelected();btn.classList.add("selected");
+  });
+  el("modalBody").querySelectorAll("[data-roulette-number]").forEach(btn=>btn.onclick=()=>{
+    type="number";target=Number(btn.dataset.rouletteNumber);el("targetNumber").value=target;clearSelected();btn.classList.add("selected");
+  });
+  el("rouletteSpin").onclick=()=>{
+    const n=amount();if(!n||!expense(n))return;
+    const ball=Math.floor(Math.random()*37),color=colorOf(ball);
+    let win=false,mult=0;
+    if(type==="number"){win=ball===target;mult=36;}
+    else if(type==="red"||type==="black"){win=color===type;mult=2;}
+    else if(type==="odd"){win=ball!==0&&ball%2===1;mult=2;}
+    else if(type==="even"){win=ball!==0&&ball%2===0;mult=2;}
+    else if(type==="low"){win=ball>=1&&ball<=18;mult=2;}
+    else if(type==="high"){win=ball>=19&&ball<=36;mult=2;}
+    const prize=win?n*mult:0;
+    const dot=el("rouletteBall");dot.className=color;dot.textContent=String(ball);
+    recent.unshift(ball);if(recent.length>6)recent.pop();
+    el("rouletteRecent").innerHTML=recent.map(x=>'<i class="'+colorOf(x)+'">'+x+'</i>').join("");
+    el("rouletteLast").textContent=ball+" "+color.toUpperCase();
+    recordGame("ROULETTE",n,prize,"BALL "+ball+" / "+color.toUpperCase());
+    result((win?"WIN":"LOSE")+" · "+ball+" "+color.toUpperCase()+" · PAY "+fmt(prize)+" C");
+  };
+}
 function startGame(g){if(g==="slots")openSlots();else if(g==="baccarat")openBaccarat();else if(g==="blackjack")openBlackjack();else if(g==="roulette")openRoulette();}
 
 const pageKeys=["home","live","slots","roulette","blackjack","events","money","notice","support"];
