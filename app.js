@@ -54,77 +54,66 @@ function claim(){const today=new Date().toLocaleDateString("en-CA");let n=0;if(s
 function openCause(id){const c=causes[id];if(!c)return;currentCause=id;const progress=Math.min(c.target,c.base+s.donations[id]);const remaining=c.target-progress;open(c.title,"SPECIAL EVENT / "+c.tag,betControl("SUPPORT COINS")+'<div class="cause-detail-icon">'+c.emoji+'</div><h3 class="cause-detail-title">'+c.title+'</h3><p class="cause-description">'+c.desc+'</p><div class="cause-amount"><span>현재 진행액</span><span>'+fmt(progress)+' / '+fmt(c.target)+' C</span></div><div class="progress"><span style="width:'+(progress/c.target*100)+'%"></span></div><div class="action-row"><button id="donateBtn" class="play-btn" '+(!remaining?"disabled":"")+'>코인 보내기 ↗</button></div><div id="result" class="result">'+(remaining?"남은 목표 "+fmt(remaining)+" C":"목표 달성! 다른 프로젝트를 찾아보세요.")+'</div>',"cause");const inp=el("betInput");inp.max=Math.max(UNIT,remaining);inp.step=UNIT;inp.min=UNIT;inp.value=Math.min(UNIT,Math.max(UNIT,remaining),Math.max(UNIT,s.coins));el("donateBtn").onclick=()=>{const requested=amount();if(!requested)return;const room=Math.max(0,c.target-c.base-s.donations[id]);if(!room){showToast("이미 달성한 프로젝트입니다.");return;}const n=Math.min(requested,toUnit(room));if(n<UNIT||!expense(n))return;s.donations[id]+=n;s.total+=n;s.count+=1;log(c.title,-n,"EVENT SUPPORT");save();showToast(fmt(n)+" 코인으로 참여했어요.");openCause(id);};}
 function openSlots(){
   const recent=[];
-  const symbols=[
-    {v:"◆",c:"violet"},{v:"✦",c:"pink"},{v:"♛",c:"gold"},
-    {v:"A",c:"cyan"},{v:"K",c:"blue"},{v:"Q",c:"green"},{v:"J",c:"slate"}
-  ];
+  const symbols=["A","K","Q","J","◆","♛"];
   const rows=5,cols=6;
-  const randomSym=()=>symbols[Math.floor(Math.random()*symbols.length)];
-  const makeInitial=()=>Array.from({length:rows*cols},(_,i)=>{
-    const s=randomSym();return '<i class="grid-symbol '+s.c+'" id="slotCell'+i+'">'+s.v+'</i>';
-  }).join("");
+  const cls=v=>v==="◆"?"gem":v==="♛"?"crown":"letter";
+  const makeGrid=()=>Array.from({length:rows*cols},(_,i)=>'<i class="video-slot-symbol letter" id="slotCell'+i+'">A</i>').join("");
 
-  open("NEON VAULT","WAGERWELL ORIGINALS · 6×5 CLUSTER",
-    '<div class="game-statusbar modern-gamebar"><span><i class="live-dot"></i> ORIGINALS · SLOT 01</span><b>NEON VAULT</b><em>DROP POOL 42,318,000 C</em></div>'+
-    '<div class="modern-slot-game">'+
-      '<div class="msg-topline"><span>7,776 WAYS</span><b>TUMBLE GRID</b><em>HIGH VOL</em></div>'+
-      '<div class="cluster-grid" id="clusterGrid">'+makeInitial()+'</div>'+
-      '<div class="cluster-bottom">'+
-        '<span><small>WIN MULTI</small><b id="slotMulti">x1</b></span>'+
-        '<span><small>LAST WIN</small><b id="slotLastWin">0 C</b></span>'+
-        '<span><small>MAX WIN</small><b>x5,000</b></span>'+
-      '</div>'+
+  open("VAULT DROP","WAGERWELL SLOT · 6×5 TUMBLE",
+    '<div class="game-statusbar"><span><i class="live-dot"></i> SLOT SERVER 01</span><b>VAULT DROP</b><em>136 GAMES · HIGH VOL</em></div>'+
+    '<div class="video-slot-frame">'+
+      '<div class="video-slot-head"><span>7,776 WAYS</span><b>VAULT DROP</b><em>MAX x5,000</em></div>'+
+      '<div class="video-slot-grid">'+makeGrid()+'</div>'+
+      '<div class="video-slot-foot"><span><small>LAST WIN</small><b id="slotLastWin">0 C</b></span><span><small>MULTIPLIER</small><b id="slotMulti">x1</b></span><span><small>MODE</small><b>TUMBLE</b></span></div>'+
     '</div>'+
     betControl("BET")+
-    '<div class="game-actionbar modern-slot-actions"><button id="spin" class="play-btn modern-spin">SPIN</button><button class="quick" id="slotAuto" type="button">AUTO</button><button class="quick" type="button">FEATURE</button></div>'+
-    '<div class="recent-panel modern-recent"><div class="recent-head"><b>RECENT</b><span>최근 5회</span></div><div id="slotRecent" class="recent-strip"><i>—</i><i>—</i><i>—</i><i>—</i><i>—</i></div></div>'+
-    '<div id="result" class="result casino-result">같은 심볼 5개 이상이 연결되면 CLUSTER WIN.</div>'
+    '<div class="game-actionbar"><button id="spin" class="play-btn main-spin">SPIN</button><button class="quick" type="button">AUTO</button><button class="quick" type="button">FEATURE</button></div>'+
+    '<div class="recent-panel"><div class="recent-head"><b>RECENT</b><span>최근 5회</span></div><div id="slotRecent" class="recent-strip"><i>—</i><i>—</i><i>—</i><i>—</i><i>—</i></div></div>'+
+    '<div id="result" class="result casino-result">같은 심볼 5개 이상이 연결되면 당첨.</div>'
   ,"slots");
 
-  function biggestCluster(grid){
+  function largestCluster(grid){
     const seen=new Set();let best=0,bestVal="";
     const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
-    for(let idx=0;idx<grid.length;idx++){
-      if(seen.has(idx))continue;
-      const val=grid[idx].v,stack=[idx];seen.add(idx);let count=0;
+    for(let i=0;i<grid.length;i++){
+      if(seen.has(i))continue;
+      const v=grid[i],stack=[i];seen.add(i);let count=0;
       while(stack.length){
         const cur=stack.pop();count++;
         const r=Math.floor(cur/cols),c=cur%cols;
         for(const [dr,dc] of dirs){
-          const nr=r+dr,nc=c+dc;
-          if(nr<0||nr>=rows||nc<0||nc>=cols)continue;
+          const nr=r+dr,nc=c+dc;if(nr<0||nr>=rows||nc<0||nc>=cols)continue;
           const ni=nr*cols+nc;
-          if(!seen.has(ni)&&grid[ni].v===val){seen.add(ni);stack.push(ni);}
+          if(!seen.has(ni)&&grid[ni]===v){seen.add(ni);stack.push(ni);}
         }
       }
-      if(count>best){best=count;bestVal=val;}
+      if(count>best){best=count;bestVal=v;}
     }
     return {count:best,val:bestVal};
   }
 
   el("spin").onclick=()=>{
     const n=amount();if(!n||!expense(n))return;
-    const grid=Array.from({length:rows*cols},randomSym);
-    grid.forEach((s,i)=>{
+    const grid=Array.from({length:rows*cols},()=>symbols[Math.floor(Math.random()*symbols.length)]);
+    grid.forEach((v,i)=>{
       const cell=el("slotCell"+i);
-      cell.className="grid-symbol "+s.c+" pop";
-      cell.textContent=s.v;
-      setTimeout(()=>cell.classList.remove("pop"),260);
+      cell.className="video-slot-symbol "+cls(v)+" spin-pop";
+      cell.textContent=v;
+      setTimeout(()=>cell.classList.remove("spin-pop"),220);
     });
-    const hit=biggestCluster(grid);
+    const hit=largestCluster(grid);
     let mult=0;
-    if(hit.count>=11)mult=15;
-    else if(hit.count>=9)mult=8;
+    if(hit.count>=11)mult=12;
+    else if(hit.count>=9)mult=7;
     else if(hit.count>=7)mult=4;
     else if(hit.count>=5)mult=2;
     const prize=n*mult;
-    recent.unshift(mult?hit.val+" x"+mult:"MISS");
-    if(recent.length>5)recent.pop();
-    recordGame("NEON VAULT",n,prize,"CLUSTER "+hit.val+" x"+hit.count);
-    el("slotMulti").textContent="x"+(mult||1);
+    recordGame("VAULT DROP",n,prize,"CLUSTER "+hit.val+" x"+hit.count);
     el("slotLastWin").textContent=fmt(prize)+" C";
+    el("slotMulti").textContent="x"+(mult||1);
+    recent.unshift(mult?hit.val+" x"+mult:"MISS");if(recent.length>5)recent.pop();
     el("slotRecent").innerHTML=Array.from({length:5},(_,i)=>'<i>'+(recent[i]||"—")+'</i>').join("");
-    result(mult?"CLUSTER WIN · "+hit.val+" × "+hit.count+" · PAY "+fmt(prize)+" C":"NO CLUSTER · NEXT SPIN");
+    result(mult?"WIN · "+hit.val+" × "+hit.count+" · PAY "+fmt(prize)+" C":"NO WIN · NEXT SPIN");
   };
 }
 const rank=card=>Math.min(10,card.r);function deck(){const cards=[];for(let d=0;d<4;d++)for(let r=1;r<=13;r++)cards.push({r,s:["♠","♥","♦","♣"][d]});for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}return cards;}
@@ -228,36 +217,26 @@ const redNums=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);const 
 function openRoulette(){
   const recent=[32,15,19,4,0,21];
   const nums=Array.from({length:37},(_,i)=>i);
-  const numberGrid='<div class="roulette-number-grid modern-number-grid">'+nums.map(n=>'<button class="roulette-number '+colorOf(n)+'" data-roulette-number="'+n+'">'+n+'</button>').join('')+'</div>';
+  const numberGrid='<div class="roulette-number-grid live-number-grid">'+nums.map(n=>'<button class="roulette-number '+colorOf(n)+'" data-roulette-number="'+n+'">'+n+'</button>').join('')+'</div>';
 
-  open("LIVE ROULETTE","IMMERSIVE STUDIO · TABLE 04",
-    '<div class="game-statusbar modern-gamebar"><span><i class="live-dot"></i> STUDIO 04 · LIVE</span><b>IMMERSIVE ROULETTE</b><em>482 WATCHING · SINGLE ZERO</em></div>'+
-    '<div class="modern-roulette-game">'+
-      '<div class="roulette-live-feed">'+
-        '<div class="rlf-badge"><i></i> LIVE</div>'+
-        '<div class="rlf-wheel"><div class="rlf-inner"><span id="rouletteBall">—</span></div></div>'+
-        '<div class="rlf-caption"><small>WAGERWELL STUDIO 04</small><b>IMMERSIVE ROULETTE</b><em>ROUND #1842</em></div>'+
-      '</div>'+
-      '<aside class="roulette-live-data">'+
-        '<div class="rld-head"><b>RECENT</b><span>LIVE DATA</span></div>'+
-        '<div id="rouletteRecent" class="rld-recent">'+recent.map(x=>'<i class="'+colorOf(x)+'">'+x+'</i>').join('')+'</div>'+
-        '<div class="rld-trend"><span><small>RED</small><b>48%</b></span><span><small>BLACK</small><b>46%</b></span><span><small>ZERO</small><b class="green">6%</b></span></div>'+
-        '<div class="rld-meta"><span>AVG ROUND <b>38s</b></span><span>PLAYERS <b>482</b></span></div>'+
-      '</aside>'+
+  open("LIVE ROULETTE","WAGERWELL LIVE · STUDIO 04",
+    '<div class="game-statusbar"><span><i class="live-dot"></i> STUDIO 04 · LIVE</span><b>IMMERSIVE ROULETTE</b><em>482 WATCHING · SINGLE ZERO</em></div>'+
+    '<div class="live-roulette-game">'+
+      '<div class="live-roulette-video"><div class="lr-live"><i></i> LIVE</div><div class="lr-game-wheel"><span id="rouletteBall">—</span></div><div class="lr-caption"><small>STUDIO 04</small><b>IMMERSIVE ROULETTE</b><em>ROUND #1842</em></div></div>'+
+      '<aside class="live-roulette-data"><div class="recent-head"><b>RECENT</b><span>LIVE DATA</span></div><div id="rouletteRecent" class="roulette-live-recent">'+recent.map(x=>'<i class="'+colorOf(x)+'">'+x+'</i>').join('')+'</div><div class="roulette-live-trend"><span>RED <b>48%</b></span><span>BLACK <b>46%</b></span><span>ZERO <b>6%</b></span></div></aside>'+
     '</div>'+
-    '<div class="modern-roulette-board">'+
-      numberGrid+
-      '<div class="roulette-outside-bets modern-outside">'+
-        '<button class="choice selected" data-roulette="red">RED <b>2x</b></button>'+
-        '<button class="choice" data-roulette="black">BLACK <b>2x</b></button>'+
-        '<button class="choice" data-roulette="odd">ODD <b>2x</b></button>'+
-        '<button class="choice" data-roulette="even">EVEN <b>2x</b></button>'+
-        '<button class="choice" data-roulette="low">1–18 <b>2x</b></button>'+
-        '<button class="choice" data-roulette="high">19–36 <b>2x</b></button>'+
+    '<div class="roulette-board-pro live-board">'+numberGrid+
+      '<div class="roulette-outside-bets">'+
+        '<button class="choice selected" data-roulette="red">RED · 2x</button>'+
+        '<button class="choice" data-roulette="black">BLACK · 2x</button>'+
+        '<button class="choice" data-roulette="odd">ODD · 2x</button>'+
+        '<button class="choice" data-roulette="even">EVEN · 2x</button>'+
+        '<button class="choice" data-roulette="low">1–18 · 2x</button>'+
+        '<button class="choice" data-roulette="high">19–36 · 2x</button>'+
       '</div>'+
     '</div>'+
     betControl("BET AMOUNT")+
-    '<div class="game-actionbar modern-roulette-actions"><button id="rouletteSpin" class="play-btn modern-spin">SPIN</button><button class="quick">REBET</button><button class="quick">CLEAR</button></div>'+
+    '<div class="game-actionbar"><button id="rouletteSpin" class="play-btn deal-wide">SPIN</button><button class="quick">REBET</button><button class="quick">CLEAR</button></div>'+
     '<div class="game-info-grid"><div><small>TABLE</small><b>STUDIO 04</b></div><div><small>LAST</small><b id="rouletteLast">—</b></div><div><small>MIN BET</small><b>1,000 C</b></div></div>'+
     '<div id="result" class="result casino-result">베팅 영역 또는 숫자를 선택하세요.</div>'
   ,"roulette");
