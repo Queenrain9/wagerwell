@@ -185,3 +185,64 @@ body{padding-bottom:0!important;background:#02060c;background-image:radial-gradi
 @media(max-width:1500px){.site-width{width:min(1460px,calc(100% - 12px))}.casino-front-v2{grid-template-columns:195px minmax(0,1fr) 215px}.v2-promo-grid{grid-template-columns:minmax(0,1fr) 245px}.v2-room-grid{grid-template-columns:repeat(3,1fr);height:auto}.v2-room{height:202px}.casino-front-v2{min-height:auto}}
 @media(max-width:1050px){.casino-front-v2{grid-template-columns:175px minmax(0,1fr)}.v2-right{display:none}.v2-provider-strip{grid-template-columns:repeat(2,1fr);height:auto}.provider-card{height:108px}.v2-room-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.casino-front-v2{display:block}.v2-left{display:none}.v2-promo-grid{grid-template-columns:1fr;height:auto}.v2-hero{height:260px}.v2-promo-stack{grid-template-columns:repeat(3,1fr);grid-template-rows:none;height:95px}.v2-provider-strip{grid-template-columns:repeat(2,1fr)}.v2-room-grid{grid-template-columns:repeat(2,1fr)}.v2-bottom-ads{grid-template-columns:repeat(2,1fr);height:auto}.v2-bottom-ads button{height:46px}.header-grid{grid-template-columns:1fr 190px}.header-flash{display:none}}
+
+
+/* v0.6.1 — spacing/position polish only */
+.header-grid{grid-template-columns:320px minmax(420px,1fr) 300px;gap:14px}
+.nav-row{justify-content:center}
+.nav-row button{min-width:112px;padding-left:14px;padding-right:14px}
+
+.casino-front-v2{
+  grid-template-columns:214px minmax(0,1fr) 232px;
+  gap:10px;
+  padding-top:10px;
+  min-height:auto;
+}
+.v2-account,.v2-category,.v2-livewins,.v2-notices,.v2-support{margin-bottom:10px}
+.v2-side-ad{margin-bottom:10px}
+
+.v2-promo-grid{
+  height:266px;
+  grid-template-columns:minmax(0,1fr) 272px;
+  gap:8px;
+  margin-bottom:9px;
+}
+.v2-promo-stack{gap:8px}
+
+.v2-provider-strip{
+  height:112px;
+  gap:6px;
+  margin-bottom:9px;
+}
+.provider-card{padding:12px 13px}
+
+.v2-live-title{margin-bottom:6px}
+.v2-room-grid{
+  height:216px;
+  gap:6px;
+  margin-top:0;
+}
+.v2-room-head{padding-left:6px;padding-right:6px}
+.v2-room-foot{padding:6px 7px}
+
+.v2-bottom-ads{
+  height:48px;
+  gap:6px;
+  margin-top:8px;
+}
+.v2-bottom-ads button{height:48px;padding-left:8px;padding-right:8px}
+
+.v2-member{padding:8px 10px 4px}
+.v2-money{padding:6px 10px 9px}
+.v2-actions{gap:5px;padding:8px}
+.v2-category>button{padding-left:10px;padding-right:10px}
+
+.v2-livewins>div:not(.v2-panel-title){padding:7px 9px}
+.v2-notices p{padding-left:9px;padding-right:9px}
+.v2-support{padding-bottom:10px}
+.v2-right-ad{padding:12px}
+
+@media(max-width:1500px){
+  .casino-front-v2{grid-template-columns:190px minmax(0,1fr) 210px;gap:8px}
+  .v2-promo-grid{grid-template-columns:minmax(0,1fr) 238px;gap:7px}
+}
