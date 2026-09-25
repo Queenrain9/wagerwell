@@ -463,3 +463,56 @@ body{padding-bottom:0!important;background:#02060c;background-image:radial-gradi
   z-index:0;
 }
 .provider-card>*{position:relative;z-index:2}
+
+
+/* v0.8 HQ image pass — preserve source detail and reduce muddy overlays */
+.v2-hero-media{position:absolute;inset:0;display:block;z-index:1;overflow:hidden}
+.v2-hero-media>img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;filter:none!important;opacity:1}
+.v2-hero-media:not(:has(img[hidden]))~.v2-hero-fallback{display:none}
+.v2-hero:before{
+  opacity:1;
+  background:linear-gradient(90deg,#05080bc2 0%,#080b106e 34%,#080b1020 58%,transparent 78%);
+  background-size:auto;
+}
+.v2-video img{
+  filter:none!important;
+  opacity:1!important;
+  image-rendering:auto;
+}
+.v2-video>strong{background:#05080b8a;padding:2px 4px;border-radius:1px}
+.header-flash{
+  background-image:
+    linear-gradient(90deg,#240b04cc 0%,#3e1607a3 44%,#1d0d064f 74%,transparent 100%),
+    url("./assets/first-screen/header_event_meal.webp?v=hq20260925");
+}
+.crest{background-image:url("./assets/first-screen/brand_crown_emblem.webp?v=hq20260925")}
+
+.p-red{
+  background-image:linear-gradient(90deg,#430910bd 0%,#31070a70 38%,transparent 78%),url("./assets/first-screen/provider_ww_live.webp?v=hq20260925");
+}
+.p-blue{
+  background-image:linear-gradient(90deg,#062742bd 0%,#082a4568 40%,transparent 78%),url("./assets/first-screen/provider_royal.webp?v=hq20260925");
+}
+.p-purple{
+  background-image:linear-gradient(90deg,#2e113cbd 0%,#36154968 42%,transparent 78%),url("./assets/first-screen/provider_prime.webp?v=hq20260925");
+}
+.p-gold{
+  background-image:linear-gradient(90deg,#362305bd 0%,#462f0968 42%,transparent 78%),url("./assets/first-screen/provider_gold.webp?v=hq20260925");
+}
+.provider-card:after{background:linear-gradient(180deg,transparent 55%,#05080b8c 100%)}
+
+.asset-promo-shelter{
+  background-image:linear-gradient(90deg,#42090cb8 0%,#26070a73 44%,transparent 86%),url("./assets/first-screen/promo_shelter_winter.webp?v=hq20260925")!important;
+}
+.asset-promo-meal{
+  background-image:linear-gradient(90deg,#493006b8 0%,#2d1a0570 43%,transparent 86%),url("./assets/first-screen/promo_meal_500.webp?v=hq20260925")!important;
+}
+.asset-promo-library{
+  background-image:linear-gradient(90deg,#0b2342b8 0%,#0a1a3070 45%,transparent 86%),url("./assets/first-screen/promo_library_books.webp?v=hq20260925")!important;
+}
+.asset-promo-ocean{
+  background-image:linear-gradient(90deg,#063541b8 0%,#072b3570 44%,transparent 86%),url("./assets/first-screen/promo_ocean_cleanup.webp?v=hq20260925")!important;
+}
+@media(max-width:760px){
+  .v2-hero-media>img{object-position:center 28%}
+}
