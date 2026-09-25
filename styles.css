@@ -516,3 +516,68 @@ body{padding-bottom:0!important;background:#02060c;background-image:radial-gradi
 @media(max-width:760px){
   .v2-hero-media>img{object-position:center 28%}
 }
+
+
+/* v0.9 — keep top account panel clear of the navigation */
+.header-grid{
+  height:116px;
+  align-items:center;
+}
+.user-panel{
+  box-sizing:border-box;
+  align-self:center;
+  height:98px;
+  padding:7px 10px;
+  overflow:hidden;
+}
+.user-line{
+  padding-bottom:4px;
+  line-height:14px;
+}
+.money-line{
+  margin:5px 0;
+  min-height:25px;
+}
+.money-line strong{
+  line-height:25px;
+}
+.user-actions{
+  gap:5px;
+}
+.user-actions button{
+  height:24px;
+  line-height:22px;
+  white-space:nowrap;
+}
+
+@media(max-width:820px){
+  .header-grid{height:92px}
+  .user-panel{
+    height:78px;
+    padding:5px 7px;
+  }
+  .user-line{
+    font-size:8px;
+    padding-bottom:2px;
+    line-height:11px;
+  }
+  .money-line{
+    margin:3px 0;
+    min-height:22px;
+  }
+  .money-line strong{
+    font-size:19px;
+    line-height:22px;
+  }
+  .user-actions button{
+    height:22px;
+    line-height:20px;
+    font-size:8px;
+  }
+}
+@media(max-width:580px){
+  .header-grid{height:76px}
+  .user-panel{height:62px;padding:5px 6px}
+  .money-line{margin:2px 0}
+  .user-actions button{height:21px;line-height:19px}
+}
