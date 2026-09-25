@@ -38,17 +38,17 @@
   </div>
 </header>
 
-<nav class="main-nav">
+<nav class="main-nav" aria-label="주요 메뉴">
   <div class="site-width nav-row">
-    <button class="home active" data-scroll="games">HOME</button>
-    <button data-game="baccarat"><span>♠</span> 라이브카지노</button>
-    <button data-game="slots"><span>♛</span> 슬롯게임</button>
-    <button data-game="roulette"><span>◎</span> 룰렛</button>
-    <button data-game="blackjack"><span>♣</span> 블랙잭</button>
-    <button data-scroll="causes"><span>★</span> 이벤트</button>
-    <button data-scroll="history">머니내역</button>
-    <button data-scroll="causes">공지사항</button>
-    <button data-scroll="causes">고객센터</button>
+    <button class="home active" data-nav="home">HOME</button>
+    <button data-nav="live"><span>♠</span> 라이브카지노</button>
+    <button data-nav="slots"><span>♛</span> 슬롯게임</button>
+    <button data-nav="roulette"><span>◎</span> 룰렛</button>
+    <button data-nav="blackjack"><span>♣</span> 블랙잭</button>
+    <button data-nav="events"><span>★</span> 이벤트</button>
+    <button data-nav="money">머니내역</button>
+    <button data-nav="notice">공지사항</button>
+    <button data-nav="support">고객센터</button>
   </div>
 </nav>
 
@@ -60,7 +60,7 @@
   </div>
 </div>
 
-<section class="casino-front-v2 site-width" aria-label="WAGERWELL 메인 로비">
+<section id="home" class="casino-front-v2 site-width" aria-label="WAGERWELL 메인 로비">
   <aside class="v2-left">
     <section class="v2-account">
       <div class="v2-panel-title"><b>MEMBER ZONE</b><span>● ONLINE</span></div>
@@ -72,7 +72,7 @@
       </div>
     </section>
 
-    <section class="v2-category">
+    <section id="game-menu" class="v2-category">
       <div class="v2-panel-title"><b>GAME MENU</b><span>QUICK</span></div>
       <button data-game="baccarat"><i class="red">LIVE</i><b>라이브 바카라</b><span>▶</span></button>
       <button data-game="slots"><i class="gold">HOT</i><b>슬롯 게임</b><span>▶</span></button>
@@ -112,7 +112,7 @@
       <button class="provider-card p-gold" data-game="baccarat"><span class="provider-suit">★</span><small>NO COMMISSION</small><b>GOLD</b><em>BACCARAT</em><strong>ENTER ▶</strong></button>
     </section>
 
-    <div class="v2-live-title"><div><b>● LIVE BACCARAT</b><span>실시간 추천 테이블</span></div><em>12 TABLE OPEN　|　현재 접속 6,842</em></div>
+    <div id="live-casino" class="v2-live-title"><div><b>● LIVE BACCARAT</b><span>실시간 추천 테이블</span></div><em>12 TABLE OPEN　|　현재 접속 6,842</em></div>
     <section class="v2-room-grid">
       <button class="v2-room red-room" data-game="baccarat">
 <span class="v2-room-head"><b>LIVE</b><small>TABLE 01　● 1,248</small></span>
@@ -154,7 +154,7 @@
   </main>
 
   <aside class="v2-right">
-    <section class="v2-livewins">
+    <section id="money" class="v2-livewins">
       <div class="v2-panel-title"><b><i></i> 실시간 당첨현황</b><span>LIVE</span></div>
       <div><b>q***12</b><span>바카라</span><strong>+12,800</strong></div>
       <div><b>k***09</b><span>룰렛</span><strong>+22,000</strong></div>
@@ -165,7 +165,7 @@
       <small>최근 당첨 기록</small>
     </section>
 
-    <section class="v2-notices">
+    <section id="notice" class="v2-notices">
       <div class="v2-panel-title"><b>공지사항</b><span>NOTICE</span></div>
       <p><b>[필독]</b><span>머니 운영안내</span><em>09:42</em></p>
       <p><b>[공지]</b><span>신규 바카라방 오픈</span><em>09:18</em></p>
@@ -174,7 +174,7 @@
       <p><b>[점검]</b><span>전체 게임 정상운영</span><em>07:55</em></p>
     </section>
 
-    <section class="v2-support">
+    <section id="support" class="v2-support">
       <div class="support-head"><span>24H ONLINE</span><b>고객센터</b></div>
       <strong>WAGERWELL</strong><small>게임문의 / 오류접수 / 이용안내</small><div><i></i> 상담원 대기중</div><button data-scroll="history">1:1 문의하기</button>
     </section>
@@ -183,7 +183,7 @@
   </aside>
 </section>
 
-<section class="v2-bottom-ads site-width">
+<section id="events" class="v2-bottom-ads site-width">
   <button class="asset-promo-shelter" data-cause="0"><span>긴급</span><b>보호소 겨울담요 1,000장</b><em>18,000 C · 36%</em></button>
   <button class="asset-promo-meal" data-cause="1"><span>HOT</span><b>따뜻한 한 끼 500인분</b><em>금일 집중지원</em></button>
   <button class="asset-promo-library" data-cause="2"><span>NEW</span><b>작은 도서관 새 책 채우기</b><em>43,000 C · 48%</em></button>
