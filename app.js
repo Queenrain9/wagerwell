@@ -3,10 +3,10 @@
 const KEY="wagerwell-demo-v1";
 const fmt=n=>Math.floor(Number(n)||0).toLocaleString("ko-KR");
 const causes=[
-{id:0,emoji:"🐾",title:"보호소 겨울 담요",tag:"PROJECT 001 · ANIMAL CARE",target:50000,base:18500,style:"a",desc:"가상의 유기동물 보호소에 겨울 담요를 마련하는 프로젝트. 코인이 모일수록 보호소가 더 따뜻해집니다."},
+{id:0,emoji:"🐾",title:"보호소 겨울 담요",tag:"PROJECT 001 · ANIMAL CARE",target:50000,base:18500,style:"a",desc:"유기동물 보호소에 겨울 담요를 마련하는 프로젝트. 코인이 모일수록 보호소가 더 따뜻해집니다."},
 {id:1,emoji:"🍱",title:"따뜻한 한 끼 500인분",tag:"PROJECT 002 · MEAL SUPPORT",target:75000,base:30750,style:"b",desc:"게임 속 무료급식소에 한 끼 식사를 지원하는 프로젝트. 실제 식사나 기부금이 전달되지는 않습니다."},
-{id:2,emoji:"📚",title:"작은 도서관 새 책",tag:"PROJECT 003 · EDUCATION",target:90000,base:42900,style:"c",desc:"가상 도서관의 빈 책장을 새 책들로 채우는 프로젝트. 이 프로젝트의 모든 변화는 게임 속에서만 이루어집니다."},
-{id:3,emoji:"🌊",title:"바다 쓰레기 수거",tag:"PROJECT 004 · OCEAN",target:120000,base:53100,style:"d",desc:"가상의 해변에서 쓰레기를 수거하고 바다 생물의 서식지를 복원하는 프로젝트."}
+{id:2,emoji:"📚",title:"작은 도서관 새 책",tag:"PROJECT 003 · EDUCATION",target:90000,base:42900,style:"c",desc:"작은 도서관의 빈 책장을 새 책들로 채우는 프로젝트."},
+{id:3,emoji:"🌊",title:"바다 쓰레기 수거",tag:"PROJECT 004 · OCEAN",target:120000,base:53100,style:"d",desc:"해변에서 쓰레기를 수거하고 바다 생물의 서식지를 복원하는 프로젝트."}
 ];
 const seed=()=>({coins:10000,donations:[0,0,0,0],history:[],claimed:"",total:0,count:0});
 let s=seed();try{let v=JSON.parse(localStorage.getItem(KEY));if(v&&typeof v==="object"){s={...seed(),...v};s.coins=Math.max(0,Math.min(1e9,Math.floor(Number(s.coins)||0)));s.donations=causes.map((_,i)=>Math.max(0,Math.floor(Number(v.donations&&v.donations[i])||0)));s.history=Array.isArray(v.history)?v.history.slice(0,20):[];s.total=s.donations.reduce((a,b)=>a+b,0);s.count=Math.max(0,Math.floor(Number(s.count)||0));}}catch(_){}
@@ -20,7 +20,7 @@ function save(){store();wallet();renderHistory();renderCauses();}
 function expense(n){if(!Number.isSafeInteger(n)||n<=0||n>s.coins){showToast("보유 코인보다 큰 금액은 사용할 수 없어요.");return false;}s.coins-=n;return true;}
 function amount(){let n=Number(el("betInput")?.value);if(!Number.isSafeInteger(n)||n<1||n>1000000){showToast("베팅 금액은 1~1,000,000 코인입니다.");return null;}return n;}
 function pay(n){s.coins=Math.min(1e9,s.coins+n);}
-function betControl(label="BET AMOUNT"){return '<div class="modal-balance"><span>AVAILABLE VIRTUAL COINS</span><strong>ⓒ <span id="modalCoins">'+fmt(s.coins)+'</span></strong></div><div class="bet-row"><label>'+label+'<input id="betInput" aria-label="베팅 금액" type="number" min="1" max="1000000" step="1" value="'+Math.min(100,Math.max(1,s.coins))+'"></label><button class="quick" data-bet="100">100</button><button class="quick" data-bet="500">500</button><button class="quick" data-bet="max">MAX</button></div>';}
+function betControl(label="BET AMOUNT"){return '<div class="modal-balance"><span>AVAILABLE COINS</span><strong>ⓒ <span id="modalCoins">'+fmt(s.coins)+'</span></strong></div><div class="bet-row"><label>'+label+'<input id="betInput" aria-label="베팅 금액" type="number" min="1" max="1000000" step="1" value="'+Math.min(100,Math.max(1,s.coins))+'"></label><button class="quick" data-bet="100">100</button><button class="quick" data-bet="500">500</button><button class="quick" data-bet="max">MAX</button></div>';}
 function syncModalCoins(){if(el("modalCoins"))el("modalCoins").textContent=fmt(s.coins);}
 function result(msg){if(el("result"))el("result").textContent=msg;}
 function open(title,kicker,html,type){modalType=type;el("modalTitle").textContent=title;el("modalKicker").textContent=kicker;el("modalBody").innerHTML=html;el("modal").classList.remove("hidden");el("modal").setAttribute("aria-hidden","false");el("closeModal").focus();}
@@ -28,8 +28,8 @@ function close(){el("modal").classList.add("hidden");el("modal").setAttribute("a
 function recordGame(name,stake,payout,detail){pay(payout);log(name,payout-stake,detail);save();syncModalCoins();}
 function renderHistory(){const root=el("historyList");root.innerHTML="";if(!s.history.length){const p=document.createElement("p");p.className="hint";p.textContent="아직 거래 기록이 없습니다. 게임을 플레이하거나 광고 배너에 코인을 사용해 보세요.";root.append(p);return;}s.history.slice(0,8).forEach(h=>{const row=document.createElement("div");row.className="ledger-row";const left=document.createElement("div");const b=document.createElement("b");b.textContent=String(h.title||"GAME");const sm=document.createElement("small");sm.textContent=String(h.ts||"")+" · "+String(h.detail||"");left.append(b,sm);const val=document.createElement("strong");val.className=h.delta<0?"negative":"";val.textContent=(h.delta>=0?"+":"")+fmt(h.delta)+" C";row.append(left,val);root.append(row);});}
 function renderCauses(){const root=el("causeGrid");root.innerHTML="";causes.forEach(c=>{const progress=Math.min(c.target,c.base+s.donations[c.id]),pct=Math.round(progress/c.target*100);const card=document.createElement("button");card.className="cause-card";card.dataset.cause=String(c.id);card.innerHTML='<div class="cause-cover '+c.style+'"><span>'+c.emoji+'</span><div><small>'+c.tag+'</small><b>'+c.title+'</b></div></div><div class="cause-meta"><div><span>PROJECT FUNDING</span><b>'+fmt(progress)+' / '+fmt(c.target)+' C</b></div><div class="progress"><span style="width:'+pct+'%"></span></div><small>'+(pct>=100?"프로젝트 목표 달성 ✓":"달성률 "+pct+"% · 후원하기 ↗")+'</small></div>';root.append(card);});}
-function claim(){const today=new Date().toLocaleDateString("en-CA");let n=0;if(s.coins<500){n=2000;}else if(s.claimed!==today){n=3000;s.claimed=today;}else{showToast("오늘의 무료 코인은 이미 받았어요. 잔액이 500 미만이면 구제 코인을 받을 수 있어요.");return;}pay(n);log("무료 가상 코인",n,"현금 가치 없음");save();showToast(fmt(n)+" 가상 코인이 지급됐어요.");}
-function openCause(id){const c=causes[id];if(!c)return;currentCause=id;const progress=Math.min(c.target,c.base+s.donations[id]);const remaining=c.target-progress;open(c.title,"VIRTUAL CAUSE / "+c.tag,betControl("SUPPORT COINS")+'<div class="cause-detail-icon">'+c.emoji+'</div><h3 class="cause-detail-title">'+c.title+'</h3><p class="cause-description">'+c.desc+'</p><div class="cause-amount"><span>현재 진행액</span><span>'+fmt(progress)+' / '+fmt(c.target)+' C</span></div><div class="progress"><span style="width:'+(progress/c.target*100)+'%"></span></div><div class="action-row"><button id="donateBtn" class="play-btn" '+(!remaining?"disabled":"")+'>가상 코인 보내기 ↗</button></div><div id="result" class="result">'+(remaining?"남은 목표 "+fmt(remaining)+" C":"목표 달성! 다른 프로젝트를 찾아보세요.")+'</div><p class="hint">ⓘ 게임 안의 가상 프로젝트입니다. 실제 기부나 외부 송금이 발생하지 않습니다.</p>',"cause");const inp=el("betInput");inp.max=Math.max(1,remaining);inp.value=Math.min(1000,Math.max(1,remaining),Math.max(1,s.coins));el("donateBtn").onclick=()=>{const requested=amount();if(!requested)return;const room=Math.max(0,c.target-c.base-s.donations[id]);if(!room){showToast("이미 달성한 프로젝트입니다.");return;}const n=Math.min(requested,room);if(!expense(n))return;s.donations[id]+=n;s.total+=n;s.count+=1;log(c.title,-n,"가상 선행 프로젝트에 사용");save();showToast(fmt(n)+"코인으로 가상의 선행에 참여했어요.");openCause(id);};}
+function claim(){const today=new Date().toLocaleDateString("en-CA");let n=0;if(s.coins<500){n=2000;}else if(s.claimed!==today){n=3000;s.claimed=today;}else{showToast("오늘의 무료 코인은 이미 받았어요. 잔액이 500 미만이면 구제 코인을 받을 수 있어요.");return;}pay(n);log("무료 코인",n,"DAILY BONUS");save();showToast(fmt(n)+" 코인이 지급됐어요.");}
+function openCause(id){const c=causes[id];if(!c)return;currentCause=id;const progress=Math.min(c.target,c.base+s.donations[id]);const remaining=c.target-progress;open(c.title,"SPECIAL EVENT / "+c.tag,betControl("SUPPORT COINS")+'<div class="cause-detail-icon">'+c.emoji+'</div><h3 class="cause-detail-title">'+c.title+'</h3><p class="cause-description">'+c.desc+'</p><div class="cause-amount"><span>현재 진행액</span><span>'+fmt(progress)+' / '+fmt(c.target)+' C</span></div><div class="progress"><span style="width:'+(progress/c.target*100)+'%"></span></div><div class="action-row"><button id="donateBtn" class="play-btn" '+(!remaining?"disabled":"")+'>코인 보내기 ↗</button></div><div id="result" class="result">'+(remaining?"남은 목표 "+fmt(remaining)+" C":"목표 달성! 다른 프로젝트를 찾아보세요.")+'</div>',"cause");const inp=el("betInput");inp.max=Math.max(1,remaining);inp.value=Math.min(1000,Math.max(1,remaining),Math.max(1,s.coins));el("donateBtn").onclick=()=>{const requested=amount();if(!requested)return;const room=Math.max(0,c.target-c.base-s.donations[id]);if(!room){showToast("이미 달성한 프로젝트입니다.");return;}const n=Math.min(requested,room);if(!expense(n))return;s.donations[id]+=n;s.total+=n;s.count+=1;log(c.title,-n,"EVENT SUPPORT");save();showToast(fmt(n)+" 코인으로 참여했어요.");openCause(id);};}
 function openSlots(){open("LUCKY 777","GAME 01 / SLOTS",betControl()+'<div class="reels"><div class="reel" id="reel0">7</div><div class="reel" id="reel1">7</div><div class="reel" id="reel2">7</div></div><div class="action-row"><button id="spin" class="play-btn">SPIN ▶</button></div><div id="result" class="result">세 칸이 같으면 당첨! 777 = 25배 · 🍒🍒🍒 = 12배 · 기타 3개 = 6배 · 체리 2개 = 2배</div><p class="hint">배당은 원금을 포함한 지급액입니다. 각 기호는 동일 확률로 등장합니다.</p>',"slots");el("spin").onclick=()=>{const n=amount();if(!n||!expense(n))return;const symbols=["7","🍒","🍋","🔔","⭐","🍀"];const rr=[0,1,2].map(()=>symbols[Math.floor(Math.random()*symbols.length)]);rr.forEach((v,i)=>el("reel"+i).textContent=v);let x=0;if(rr.every(v=>v==="7"))x=25;else if(rr.every(v=>v==="🍒"))x=12;else if(rr.every(v=>v===rr[0]))x=6;else if(rr.filter(v=>v==="🍒").length===2)x=2;const prize=n*x;recordGame("LUCKY 777",n,prize,rr.join(" "));result(x?"당첨! "+fmt(prize)+"코인이 지급됐어요. (x"+x+")":"이번엔 미당첨. 다음 기회를 노려보세요.");};}
 const rank=card=>Math.min(10,card.r);function deck(){const cards=[];for(let d=0;d<4;d++)for(let r=1;r<=13;r++)cards.push({r,s:["♠","♥","♦","♣"][d]});for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]];}return cards;}
 function handTotal(h){let v=0,a=0;h.forEach(c=>{v+=c.r===1?11:rank(c);if(c.r===1)a++;});while(v>21&&a){v-=10;a--;}return v;}
@@ -46,10 +46,10 @@ function openRoulette(){open("ROULETTE","GAME 04 / TABLE",betControl()+'<div cla
 function startGame(g){if(g==="slots")openSlots();else if(g==="baccarat")openBaccarat();else if(g==="blackjack")openBlackjack();else if(g==="roulette")openRoulette();}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-game],[data-scroll],[data-cause],[data-close],[data-bet]");if(!b)return;if(b.dataset.close){close();return;}if(b.dataset.bet){const input=el("betInput");if(!input||input.disabled)return;input.value=b.dataset.bet==="max"?Math.max(1,Math.min(1000000,s.coins)):b.dataset.bet;return;}if(b.dataset.game){startGame(b.dataset.game);return;}if(b.dataset.cause!==undefined){openCause(Number(b.dataset.cause));return;}if(b.dataset.scroll){el(b.dataset.scroll)?.scrollIntoView({behavior:"smooth",block:"start"});}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!el("modal").classList.contains("hidden"))close();if((e.key==="Enter"||e.key===" ")&&e.target.matches("[role=button][data-cause]")){e.preventDefault();openCause(Number(e.target.dataset.cause));}});
-el("closeModal").onclick=close;el("claimBtn").onclick=claim;if(el("firstClaim"))el("firstClaim").onclick=claim;if(el("firstPromoClaim"))el("firstPromoClaim").onclick=claim;if(el("v2Daily"))el("v2Daily").onclick=claim;if(el("rightClaimBtn"))el("rightClaimBtn").onclick=claim;if(el("claimPromo"))el("claimPromo").onclick=claim;el("resetBtn").onclick=()=>{if(!confirm("현재 브라우저에 저장된 코인·게임 기록·가상 후원 내역을 초기화할까요?"))return;s=seed();save();showToast("데모 데이터를 초기화했어요.");};
+el("closeModal").onclick=close;el("claimBtn").onclick=claim;if(el("firstClaim"))el("firstClaim").onclick=claim;if(el("firstPromoClaim"))el("firstPromoClaim").onclick=claim;if(el("v2Daily"))el("v2Daily").onclick=claim;if(el("rightClaimBtn"))el("rightClaimBtn").onclick=claim;if(el("claimPromo"))el("claimPromo").onclick=claim;el("resetBtn").onclick=()=>{if(!confirm("현재 브라우저에 저장된 코인·게임 기록·지원 내역을 초기화할까요?"))return;s=seed();save();showToast("데모 데이터를 초기화했어요.");};
 wallet();renderCauses();renderHistory();
 
-el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영중   ◆   신규 가상머니 무료충전 이벤트   ◆   GOOD PROJECT 오늘의 추천 오픈   ◆   모든 머니는 현금 가치가 없는 가상 코인입니다.";
+el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영중   ◆   신규 무료충전 이벤트   ◆   금일 집중지원 이벤트 오픈   ◆   24H ONLINE";
 
 (function enhanceCasinoPortal(){
   const main=document.querySelector(".center-stage");
@@ -69,7 +69,7 @@ el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영�
   if(quick){
     const strip=document.createElement("div");
     strip.className="fake-win-strip";
-    strip.innerHTML='<span>실시간 당첨</span><div class="fake-win-marquee">q***12 <b>+12,800 C</b>　k***09 <b>+22,000 C</b>　m***88 <b>+14,200 C</b>　p***31 <b>+5,600 C</b></div><em>연출용 가상 기록</em>';
+    strip.innerHTML='<span>실시간 당첨</span><div class="fake-win-marquee">q***12 <b>+12,800 C</b>　k***09 <b>+22,000 C</b>　m***88 <b>+14,200 C</b>　p***31 <b>+5,600 C</b></div><em>최근 당첨 기록</em>';
     quick.insertAdjacentElement("afterend",strip);
   }
 
@@ -77,8 +77,8 @@ el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영�
   layer.className="popup-layer";
   layer.id="promoLayer";
   layer.innerHTML=
-    '<div class="popup-ad-card popup-left"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">WELCOME BONUS</span><small>WAGERWELL 신규회원 이벤트</small><h2>매일 무료 가상머니<br><em>3,000 C</em> 지급</h2><p>현금 가치가 없는 게임용 가상 코인입니다.</p><button class="pop-action" id="popupClaim">무료충전 받기 ▶</button></div>'+
-    '<div class="popup-ad-card popup-right"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">GOOD EVENT</span><small>오늘의 추천 프로젝트</small><h2>🐾 보호소<br>겨울 담요 지원</h2><p>게임에서 얻은 가상 코인으로 참여할 수 있습니다.</p><button class="pop-action" data-cause="0">프로젝트 보기 ▶</button></div>'+
+    '<div class="popup-ad-card popup-left"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">WELCOME BONUS</span><small>WAGERWELL 신규회원 이벤트</small><h2>매일 무료머니<br><em>3,000 C</em> 지급</h2><p>신규회원 웰컴 보너스</p><button class="pop-action" id="popupClaim">무료충전 받기 ▶</button></div>'+
+    '<div class="popup-ad-card popup-right"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">GOOD EVENT</span><small>오늘의 추천 프로젝트</small><h2>🐾 보호소<br>겨울 담요 지원</h2><p>보유 코인으로 참여할 수 있습니다.</p><button class="pop-action" data-cause="0">프로젝트 보기 ▶</button></div>'+
     '<label class="popup-today"><input type="checkbox" id="hidePromo"> 오늘은 팝업 그만 보기</label>';
   document.body.append(layer);
 
@@ -89,7 +89,7 @@ el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영�
 
   const dock=document.createElement("div");
   dock.className="bottom-quick";
-  dock.innerHTML='<div class="site-width"><span><i></i> WAGERWELL LIVE</span><button class="hot" data-game="baccarat">바카라 바로입장</button><button id="dockClaim">무료 가상머니</button><button data-scroll="causes">진행중 이벤트</button><em>VIRTUAL COIN ONLY</em></div>';
+  dock.innerHTML='<div class="site-width"><span><i></i> WAGERWELL LIVE</span><button class="hot" data-game="baccarat">바카라 바로입장</button><button id="dockClaim">무료머니</button><button data-scroll="causes">진행중 이벤트</button><em>24H LIVE</em></div>';
   document.body.append(dock);
 
   const key="wagerwell-hide-promo";
