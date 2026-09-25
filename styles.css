@@ -769,3 +769,283 @@ section.v2-bottom-ads[data-page-section].page-active{display:grid!important}
     height:auto;
   }
 }
+
+
+/* v1.2 — persistent side rails: stronger casino chassis identity */
+.persistent-left,
+.persistent-right{
+  position:relative;
+  padding:8px;
+  border:1px solid #3a4a5f;
+  background:
+    linear-gradient(180deg,#101a28f5 0%,#07101af8 55%,#050b12fb 100%);
+  box-shadow:
+    inset 0 1px #ffffff10,
+    inset 0 0 34px #000b,
+    0 12px 34px #000b;
+  isolation:isolate;
+}
+.persistent-left{
+  border-color:#75501c;
+  box-shadow:
+    inset 0 1px #f6c85f22,
+    inset 0 0 38px #000c,
+    -5px 0 24px #d99b2510,
+    0 12px 34px #000b;
+}
+.persistent-right{
+  border-color:#31546f;
+  box-shadow:
+    inset 0 1px #5fc9ff18,
+    inset 0 0 38px #000c,
+    5px 0 24px #24aef014,
+    0 12px 34px #000b;
+}
+.persistent-left:before,
+.persistent-right:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  opacity:.8;
+}
+.persistent-left:before{
+  background:
+    linear-gradient(90deg,#d39b2d30 0 1px,transparent 1px calc(100% - 1px),#d39b2d22 calc(100% - 1px)),
+    repeating-linear-gradient(135deg,#ffffff06 0 1px,transparent 1px 7px);
+}
+.persistent-right:before{
+  background:
+    linear-gradient(90deg,#3fb8ee24 0 1px,transparent 1px calc(100% - 1px),#3fb8ee24 calc(100% - 1px)),
+    repeating-linear-gradient(45deg,#ffffff05 0 1px,transparent 1px 8px);
+}
+.persistent-left:after,
+.persistent-right:after{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  top:-1px;
+  height:3px;
+  pointer-events:none;
+}
+.persistent-left:after{
+  background:linear-gradient(90deg,transparent,#dca930 14%,#fff0a0 50%,#dca930 86%,transparent);
+  box-shadow:0 0 12px #e7ad36aa;
+}
+.persistent-right:after{
+  background:linear-gradient(90deg,transparent,#33bdeb 14%,#86eaff 50%,#33bdeb 86%,transparent);
+  box-shadow:0 0 12px #35c8ffaa;
+}
+
+/* shared module elevation */
+.persistent-left .v2-account,
+.persistent-left .v2-category,
+.persistent-right .v2-livewins,
+.persistent-right .v2-notices,
+.persistent-right .v2-support{
+  position:relative;
+  overflow:hidden;
+  border:1px solid #40546a;
+  background:linear-gradient(180deg,#122237 0%,#0b1725 72%,#08111c 100%);
+  box-shadow:
+    inset 0 1px #ffffff10,
+    inset 0 -12px 24px #0007,
+    0 4px 10px #0008;
+}
+.persistent-left .v2-account,
+.persistent-left .v2-category{
+  border-color:#6e5126;
+}
+.persistent-right .v2-livewins,
+.persistent-right .v2-notices,
+.persistent-right .v2-support{
+  border-color:#31536c;
+}
+
+/* section headers read as chrome, not ordinary cards */
+.persistent-left .v2-panel-title,
+.persistent-right .v2-panel-title{
+  height:31px;
+  position:relative;
+  overflow:hidden;
+  padding:0 9px;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+}
+.persistent-left .v2-panel-title{
+  background:linear-gradient(90deg,#4e2d08,#8a5a11 46%,#261706);
+  border-bottom:1px solid #bb852b;
+  box-shadow:inset 0 1px #f3ce7244,inset 0 -8px 16px #0007;
+}
+.persistent-right .v2-panel-title{
+  background:linear-gradient(90deg,#12344a,#1d5671 46%,#0a2130);
+  border-bottom:1px solid #3980a2;
+  box-shadow:inset 0 1px #83ddff24,inset 0 -8px 16px #0007;
+}
+.persistent-left .v2-panel-title:after,
+.persistent-right .v2-panel-title:after{
+  content:"";
+  position:absolute;
+  left:-25%;
+  top:0;
+  width:45%;
+  height:100%;
+  transform:skewX(-25deg);
+  background:linear-gradient(90deg,transparent,#fff3 50%,transparent);
+  opacity:.35;
+}
+.persistent-left .v2-panel-title b,
+.persistent-right .v2-panel-title b{
+  font-size:8px;
+  text-shadow:0 1px 2px #000;
+}
+.persistent-left .v2-panel-title span{
+  color:#ffe083;
+}
+.persistent-right .v2-panel-title span{
+  color:#76e5ff;
+}
+
+/* left rail: VIP / money zone */
+.persistent-left .v2-member{
+  background:linear-gradient(90deg,#120d08,#0b121d);
+  border-bottom:1px solid #3f311d;
+}
+.persistent-left .v2-member em{
+  color:#ffd45b;
+  text-shadow:0 0 8px #ffca3670;
+}
+.persistent-left .v2-money{
+  background:
+    radial-gradient(circle at 14% 50%,#8b5f1820,transparent 38%),
+    linear-gradient(180deg,#101a27,#09121d);
+}
+.persistent-left .v2-money strong{
+  color:#ffd149;
+  text-shadow:0 0 12px #ffbd3242,0 2px #000;
+}
+.persistent-left .v2-actions{
+  background:#070d15;
+  border-top:1px solid #332817;
+}
+.persistent-left .v2-actions button{
+  border:1px solid #4b3c22;
+  background:linear-gradient(#243246,#111c2a);
+  box-shadow:inset 0 1px #ffffff10;
+}
+.persistent-left .v2-actions button:first-child{
+  border-color:#e33b42;
+  background:linear-gradient(#ed2631,#980710);
+  box-shadow:inset 0 1px #ff858a,0 0 10px #d5162440;
+}
+
+/* left quick menu gets stronger navigation treatment */
+.persistent-left .v2-category>button{
+  min-height:42px;
+  border-bottom:1px solid #24364a;
+  background:linear-gradient(90deg,#0b1521,#111f30);
+  transition:.15s ease;
+}
+.persistent-left .v2-category>button:hover{
+  transform:translateX(2px);
+  background:linear-gradient(90deg,#192d43,#112238);
+  box-shadow:inset 3px 0 #e2b23a;
+}
+.persistent-left .v2-category>button>span{
+  color:#d8ae49;
+}
+
+/* side ads become framed promo plates */
+.persistent-left .v2-side-ad,
+.persistent-right .v2-right-ad{
+  border-width:2px;
+  box-shadow:
+    inset 0 0 0 1px #ffffff0b,
+    inset 0 0 34px #0009,
+    0 5px 14px #000a;
+}
+.persistent-left .v2-side-ad:before,
+.persistent-right .v2-right-ad:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid #ffffff16;
+  pointer-events:none;
+}
+.persistent-left .v2-side-ad b,
+.persistent-right .v2-right-ad b{
+  text-shadow:0 2px 4px #000,0 0 8px #000;
+}
+.persistent-left .v2-stamp,
+.persistent-right .v2-right-ad>span{
+  box-shadow:0 0 12px #d7192875,inset 0 1px #ffffff35;
+}
+
+/* right rail: live monitoring console */
+.persistent-right .v2-livewins>div:not(.v2-panel-title){
+  position:relative;
+  background:linear-gradient(90deg,#07111b,#0d1b29);
+  border-bottom-color:#1f3c4e;
+}
+.persistent-right .v2-livewins>div:not(.v2-panel-title):before{
+  content:"";
+  width:3px;
+  align-self:stretch;
+  background:#24c878;
+  box-shadow:0 0 8px #24c87880;
+}
+.persistent-right .v2-livewins>div:not(.v2-panel-title){
+  grid-template-columns:3px 1fr 1fr auto;
+}
+.persistent-right .v2-livewins>div b{
+  color:#d7e1eb;
+}
+.persistent-right .v2-livewins>div strong{
+  color:#58ef91;
+  text-shadow:0 0 8px #37d47548;
+}
+.persistent-right .v2-notices p{
+  background:linear-gradient(90deg,#09131f,#0d1b29);
+  border-bottom-color:#20384b;
+}
+.persistent-right .v2-notices p:hover{
+  background:linear-gradient(90deg,#102438,#0b1b2b);
+}
+.persistent-right .v2-notices p b{
+  color:#f1bf3b;
+  text-shadow:0 0 7px #e3ad2d40;
+}
+
+/* customer-center block gets red marquee header */
+.persistent-right .support-head{
+  height:40px;
+  background:
+    linear-gradient(90deg,#7b0309,#e31a24 45%,#8c040a);
+  border-bottom:1px solid #ff626a;
+  box-shadow:
+    inset 0 1px #ff858a,
+    inset 0 -10px 18px #5a000890,
+    0 0 13px #d9172432;
+}
+.persistent-right .v2-support>strong{
+  color:#ffd34f;
+  text-shadow:0 0 12px #f3bd3845;
+}
+.persistent-right .v2-support button{
+  border-color:#466981;
+  background:linear-gradient(#254763,#132b40);
+  box-shadow:inset 0 1px #7dcee522;
+}
+
+/* center stays visually calmer so the rails read as the fixed machine/chassis */
+.casino-router-main{
+  border-left:1px solid #1d2a38;
+  border-right:1px solid #1d2a38;
+  padding:0 2px;
+}
+
+@media(max-width:1500px){
+  .persistent-left,.persistent-right{padding:6px}
+}
