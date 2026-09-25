@@ -45,25 +45,20 @@ const redNums=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);const 
 function openRoulette(){open("ROULETTE","GAME 04 / TABLE",betControl()+'<div class="choices"><button class="choice selected" data-roulette="red">RED · 2x</button><button class="choice" data-roulette="black">BLACK · 2x</button><button class="choice" data-roulette="number">SINGLE NUMBER · 36x</button></div><label id="numberBox" class="hint" style="display:none">0~36 중 하나 선택 <input id="targetNumber" type="number" min="0" max="36" value="7" style="display:block;margin-top:7px;padding:10px;width:100px;background:#0d1814;border:1px solid #456249;color:#fff"></label><div class="roulette-result" id="rouletteBall">?</div><div class="action-row"><button id="rouletteSpin" class="play-btn">SPIN WHEEL ▶</button></div><div id="result" class="result">유럽식 룰렛 · 0~36 숫자 37개 중 하나가 같은 확률로 등장합니다.</div><p class="hint">RED / BLACK 2배, 단일 숫자 36배 (원금 포함). 초록색 0에서는 색상 베팅이 지게 됩니다.</p>',"roulette");let type="red";el("modalBody").querySelectorAll("[data-roulette]").forEach(btn=>btn.onclick=()=>{type=btn.dataset.roulette;el("numberBox").style.display=type==="number"?"block":"none";el("modalBody").querySelectorAll("[data-roulette]").forEach(x=>x.classList.toggle("selected",x===btn));});el("rouletteSpin").onclick=()=>{const n=amount();if(!n)return;let target=null;if(type==="number"){target=Number(el("targetNumber").value);if(!Number.isInteger(target)||target<0||target>36){showToast("번호는 0~36 중 선택하세요.");return;}}if(!expense(n))return;const ball=Math.floor(Math.random()*37),color=colorOf(ball),win=type==="number"?ball===target:color===type,prize=win?n*(type==="number"?36:2):0;const dot=el("rouletteBall");dot.className="roulette-result "+color;dot.textContent=String(ball);recordGame("ROULETTE",n,prize,"BALL "+ball+" / "+color.toUpperCase());result((win?"당첨!":"미당첨")+" | "+ball+" "+color.toUpperCase()+" | 지급 "+fmt(prize)+" C");};}
 function startGame(g){if(g==="slots")openSlots();else if(g==="baccarat")openBaccarat();else if(g==="blackjack")openBlackjack();else if(g==="roulette")openRoulette();}
 
-const navTargets={
-  home:"home",
-  live:"live-casino",
-  slots:"game-menu",
-  roulette:"game-menu",
-  blackjack:"game-menu",
-  events:"events",
-  money:"money",
-  notice:"notice",
-  support:"support"
-};
-function navigateTopMenu(key){
-  const id=navTargets[key];
-  if(!id)return;
+const pageKeys=["home","live","slots","roulette","blackjack","events","money","notice","support"];
+function renderPortalPage(key,{push=false}={}){
+  if(!pageKeys.includes(key))key="live";
+  document.querySelectorAll("[data-page-section]").forEach(node=>{
+    node.classList.toggle("page-active",node.dataset.pageSection===key);
+  });
   document.querySelectorAll(".main-nav [data-nav]").forEach(btn=>btn.classList.toggle("active",btn.dataset.nav===key));
-  const target=document.getElementById(id);
-  if(target)target.scrollIntoView({behavior:"smooth",block:key==="home"?"start":"center"});
-  try{history.replaceState(null,"","#"+key);}catch(_){}
+  if(el("shellBalance"))el("shellBalance").textContent=fmt(s.coins);
+  if(push){
+    try{history.pushState({page:key},"","#"+key);}catch(_){location.hash=key;}
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
 }
+function navigateTopMenu(key){renderPortalPage(key,{push:true});}
 document.querySelectorAll(".main-nav [data-nav]").forEach(btn=>{
   btn.addEventListener("click",e=>{
     e.preventDefault();
@@ -71,6 +66,14 @@ document.querySelectorAll(".main-nav [data-nav]").forEach(btn=>{
     navigateTopMenu(btn.dataset.nav);
   });
 });
+document.addEventListener("click",e=>{
+  const jump=e.target.closest("[data-nav-jump]");
+  if(!jump)return;
+  e.preventDefault();
+  navigateTopMenu(jump.dataset.navJump);
+});
+window.addEventListener("popstate",()=>renderPortalPage(location.hash.slice(1)||"live"));
+renderPortalPage(location.hash.slice(1)||"live");
 
 document.addEventListener("click",e=>{const b=e.target.closest("[data-game],[data-scroll],[data-cause],[data-close],[data-bet]");if(!b)return;if(b.dataset.close){close();return;}if(b.dataset.bet){const input=el("betInput");if(!input||input.disabled)return;input.value=b.dataset.bet==="max"?Math.max(UNIT,Math.floor(Math.min(1000000,s.coins)/UNIT)*UNIT):b.dataset.bet;return;}if(b.dataset.game){startGame(b.dataset.game);return;}if(b.dataset.cause!==undefined){openCause(Number(b.dataset.cause));return;}if(b.dataset.scroll){el(b.dataset.scroll)?.scrollIntoView({behavior:"smooth",block:"start"});}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!el("modal").classList.contains("hidden"))close();if((e.key==="Enter"||e.key===" ")&&e.target.matches("[role=button][data-cause]")){e.preventDefault();openCause(Number(e.target.dataset.cause));}});
