@@ -1,36 +1,259 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WAGERWELL — Virtual Arcade</title><meta name="description" content="가상 코인으로 즐기는 픽션 카지노 아케이드. 당첨 코인은 가상 선행 프로젝트에 사용할 수 있습니다.">
-<link rel="stylesheet" href="./styles.css"><script src="./app.js" defer></script></head>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WAGERWELL - LIVE CASINO</title>
+<meta name="description" content="가상 코인 전용 픽션 카지노 게임">
+<link rel="stylesheet" href="./styles.css">
+<script src="./app.js" defer></script>
+</head>
 <body>
-<div class="utility"><div class="wrap util-inner"><span><i class="signal"></i> WAGERWELL NETWORK <b>● LIVE</b></span><span class="util-right">100% 가상 게임 · 현금 결제/환전 없음 · 실제 기부 아님 <span class="version">BETA 0.1</span></span></div></div>
-<header class="header"><div class="wrap header-inner"><a href="#" class="brand" aria-label="WAGERWELL 메인"><span class="brand-mark">W<span>◆</span></span><span class="brand-word">WAGER<span>WELL</span><small>VIRTUAL CASINO · REAL GOOD VIBES</small></span></a><div class="head-ad"><span class="ad-marker">SITE NOTICE</span><strong>오늘도 코인은 가상으로, 선행도 가상으로.</strong><span>가상 프로젝트 OPEN <b>▶</b></span></div><div class="account"><div class="account-label">MY WALLET <span>DEMO</span></div><div class="balance"><span class="coin-icon">ⓒ</span> <strong id="balance">10,000</strong><small>COIN</small></div><button id="claimBtn" class="claim">+ 무료 코인 받기</button></div></div></header>
-<nav class="nav"><div class="wrap nav-inner"><a class="nav-logo" href="#">WW</a><button data-scroll="games" class="active">⌂ HOME</button><button data-game="slots">🎰 SLOT</button><button data-game="baccarat">♠ BACCARAT</button><button data-game="blackjack">♣ BLACKJACK</button><button data-game="roulette">◎ ROULETTE</button><button data-scroll="causes">✦ GOOD CAUSES</button><button data-scroll="history">▤ HISTORY</button><span class="nav-tail">24 / 7 OPEN <i class="signal"></i></span></div></nav>
-<div class="ticker"><div class="wrap ticker-inner"><span class="ticker-label">● LIVE FEED</span><div id="tickerText" class="ticker-text">WELCOME TO WAGERWELL — 게임에서 얻은 코인으로 가상의 선행 프로젝트에 참여하세요.</div><span class="ticker-id">WW-2026 / DEMO</span></div></div>
-<main class="wrap layout">
-<aside class="side left"><div class="side-label">QUICK ACCESS <span>01 / 04</span></div><button class="side-nav selected" data-scroll="games">▣ &nbsp; 전체 게임 <span>›</span></button><button class="side-nav" data-game="slots">▦ &nbsp; 슬롯 머신 <span>›</span></button><button class="side-nav" data-game="baccarat">♠ &nbsp; 바카라 <span>›</span></button><button class="side-nav" data-game="blackjack">♣ &nbsp; 블랙잭 <span>›</span></button><button class="side-nav" data-game="roulette">◎ &nbsp; 룰렛 <span>›</span></button><button class="side-nav special" data-scroll="causes">✦ &nbsp; 선행 배너 <span>↗</span></button>
-<div class="mini-promo promo-amber" data-cause="0" role="button" tabindex="0"><small>WELL PROJECT / 001</small><b>🐾 긴급!<br>겨울 담요 지원</b><span>보호소 따뜻함 +100%</span><strong>코인 투입하기 ↗</strong></div>
-<div class="mini-promo promo-green" data-cause="1" role="button" tabindex="0"><small>LIMITED FUND / 002</small><b>🍱 오늘의 식사<br>500인분 프로젝트</b><span>가상 급식 지원 캠페인</span><strong>참여 바로가기 ↗</strong></div>
-<div class="mini-promo promo-blue" data-cause="2" role="button" tabindex="0"><small>PROJECT / 003</small><b>📚 도서관<br>새 책 대작전</b><span>읽고 싶은 책을 채워요</span><strong>목표 금액 확인 ↗</strong></div>
-<div class="fineprint">게임 내 코인은 현금 가치가 없습니다.<br>실제 후원금이나 기부금으로 전환되지 않습니다.</div></aside>
-<section class="content">
-<div class="hero"><div class="hero-copy"><div class="overline"><span class="blink">●</span> WAGERWELL ORIGINAL / 2026</div><h1>PLAY BIG.<br><em>DO GOOD.</em></h1><p>그럴듯하게 수상한 가상 카지노.<br>당첨 코인은 전부 당신 것. 쓰는 곳은 조금 특이함.</p><div class="hero-actions"><button class="primary" data-game="slots">지금 플레이 ▶</button><button class="secondary" data-scroll="causes">선행 배너 보기 ↗</button></div><div class="hero-stats"><span><b>04</b> LIVE GAMES</span><span><b>100%</b> VIRTUAL COINS</span><span><b>00</b> REAL MONEY</span></div></div><div class="hero-art" aria-hidden="true"><div class="ray r1"></div><div class="ray r2"></div><div class="ray r3"></div><div class="poker-chip chip-back">W</div><div class="poker-chip chip-front"><span>★</span><b>WW</b><small>GOOD LUCK</small></div><div class="floating-tag">✦ <b>VIRTUAL</b> JACKPOT</div><span class="spark s1">✦</span><span class="spark s2">✦</span></div><span class="hero-number">01 — 04</span></div>
-<div class="banner-strip"><button data-cause="0" class="strip-banner warm"><span class="strip-badge">HOT</span><span><small>긴급 프로젝트 OPEN</small><strong>🐾 보호소 담요 1,000장 마련</strong></span><b>참여하기 ↗</b></button><button data-cause="1" class="strip-banner mint"><span class="strip-badge">NEW</span><span><small>오늘의 선행 배너</small><strong>🍱 한 끼의 기적 · 가상 급식 지원</strong></span><b>코인 사용 ↗</b></button></div>
-<div id="games" class="section-head"><div><span class="eyebrow">THE FLOOR / 01</span><h2>LIVE GAMES <small>가상 코인 전용</small></h2></div><span class="section-count">AVAILABLE 04 / 04 <span class="dot"></span></span></div>
-<div class="game-grid">
-<button class="game-tile slot-tile" data-game="slots"><span class="tile-head"><span class="tag hot">HOT</span><span>01 / ARCADE</span></span><span class="tile-art slots-art"><span>7</span><span>7</span><span>7</span></span><span class="tile-bottom"><span><b>LUCKY 777</b><small>3릴 슬롯 머신</small></span><i>▶</i></span></button>
-<button class="game-tile bac-tile" data-game="baccarat"><span class="tile-head"><span class="tag live">LIVE</span><span>02 / TABLE</span></span><span class="tile-art cards-art"><span>A<span>♠</span></span><span>K<span>♥</span></span></span><span class="tile-bottom"><span><b>BACCARAT</b><small>플레이어 vs 뱅커</small></span><i>▶</i></span></button>
-<button class="game-tile bj-tile" data-game="blackjack"><span class="tile-head"><span class="tag green">CLASSIC</span><span>03 / TABLE</span></span><span class="tile-art bj-art"><span>21</span><small>BLACKJACK</small></span><span class="tile-bottom"><span><b>BLACKJACK</b><small>히트 · 스탠드</small></span><i>▶</i></span></button>
-<button class="game-tile rou-tile" data-game="roulette"><span class="tile-head"><span class="tag violet">NEW</span><span>04 / TABLE</span></span><span class="tile-art roulette-art"><span class="wheel"><b>●</b></span></span><span class="tile-bottom"><span><b>ROULETTE</b><small>레드 · 블랙 · 숫자</small></span><i>▶</i></span></button></div>
-<div class="separator-ad" data-cause="2" role="button" tabindex="0"><span class="sep-icon">📚</span><span><small>ADVERTISEMENT · VIRTUAL GOOD CAUSE</small><strong>잭팟보다 큰 지식의 힘! 새 책 마련 프로젝트</strong></span><b>자세히 보기 →</b></div>
-<div id="causes" class="section-head cause-head"><div><span class="eyebrow">SPONSORED? SORT OF. / 02</span><h2>GOOD CAUSES <small>광고인 듯 선행인 듯</small></h2></div><span class="section-count">가상 프로젝트 04개</span></div>
-<p class="section-intro">배너가 왜 이렇게 많냐고요? 번 코인을 쓰는 곳이라서요. 아래 광고를 누르면 가상의 프로젝트에 코인을 보낼 수 있습니다.</p><div id="causeGrid" class="cause-grid"></div>
-<div id="history" class="ledger"><div class="ledger-header"><div><span class="eyebrow">MY ACTIVITY / 03</span><h2>TRANSACTION LOG</h2></div><button id="resetBtn" class="subtle">데모 데이터 초기화</button></div><div id="historyList"></div></div>
-<div class="footer-note">WAGERWELL IS A FICTIONAL ARCADE. NO REAL MONEY, CASHOUT OR ACTUAL CHARITABLE DONATIONS. 확률 기반 게임과 후원은 모두 가상 시뮬레이션입니다.</div>
-</section>
-<aside class="side right"><div class="right-header"><span class="blink">●</span> LIVE DASHBOARD <small>VIRTUAL</small></div><div class="right-balance"><small>YOUR AVAILABLE COINS</small><strong><span class="coin-icon">ⓒ</span> <span id="sideBalance">10,000</span></strong><button data-game="slots">PLAY NOW ↗</button></div><div class="side-label">FEATURED CAUSES <span>AD</span></div><button class="right-ad animal" data-cause="0"><small>PROJECT 001 / NOW OPEN</small><b>🐕 보호소에<br>따뜻한 밤을</b><span>담요 지원하기 →</span></button><button class="right-ad school" data-cause="2"><small>PROJECT 003 / NEW</small><b>📖 책장 비우고<br>행복 채우기</b><span>새 책 지원하기 →</span></button><button class="right-ad ocean" data-cause="3"><small>PROJECT 004 / ACTIVE</small><b>🌊 바다 구조<br>크린업 작전</b><span>오늘의 프로젝트 →</span></button><div class="side-label board-label">MY IMPACT <span>LOCAL</span></div><div class="impact-box"><small>총 가상 선행 코인</small><strong id="impactTotal">0</strong><div class="impact-divider"></div><small>참여 완료 횟수</small><strong id="impactCount">0</strong></div><div class="right-disclaimer"><b>ⓘ DEMO NOTICE</b><p>모든 잔액·당첨·광고·프로젝트는 허구입니다. 실제 도박·입금·환전·기부 기능은 없습니다.</p></div></aside>
+<div class="legal-strip">
+  <div class="site-width">
+    <span>WAGERWELL VIRTUAL GAME CENTER</span>
+    <span class="legal-note">※ 실제 금전 입금·출금·환전이 없는 가상 코인 게임입니다.</span>
+  </div>
+</div>
+
+<header class="top-header">
+  <div class="site-width header-grid">
+    <a class="casino-logo" href="#">
+      <span class="crest">♛</span>
+      <span class="logo-text"><b>WAGER</b><i>WELL</i><small>PREMIUM LIVE CASINO</small></span>
+    </a>
+    <div class="header-flash" data-cause="1" role="button" tabindex="0">
+      <span class="flash-hot">HOT</span>
+      <div><small>WAGERWELL SPECIAL EVENT</small><strong>오늘의 무료급식 프로젝트 · 500인분 도전중!</strong></div>
+      <b>바로가기 ▶</b>
+    </div>
+    <div class="user-panel">
+      <div class="user-line"><span>회원등급 <b>★ GENERAL</b></span><span>쪽지 <em>0</em></span></div>
+      <div class="money-line"><span>보유 가상머니</span><strong><i>ⓒ</i> <span id="balance">10,000</span></strong></div>
+      <div class="user-actions">
+        <button id="claimBtn" class="cash-btn">무료충전</button>
+        <button data-scroll="history" class="dark-btn">이용내역</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="site-width nav-row">
+    <button class="home active" data-scroll="games">HOME</button>
+    <button data-game="baccarat"><span>♠</span> 라이브카지노</button>
+    <button data-game="slots"><span>♛</span> 슬롯게임</button>
+    <button data-game="roulette"><span>◎</span> 룰렛</button>
+    <button data-game="blackjack"><span>♣</span> 블랙잭</button>
+    <button data-scroll="causes"><span>★</span> 이벤트</button>
+    <button data-scroll="history">머니내역</button>
+    <button data-scroll="causes">공지사항</button>
+    <button data-scroll="causes">고객센터</button>
+  </div>
+</nav>
+
+<div class="notice-ticker">
+  <div class="site-width ticker-row">
+    <span class="ticker-title">📢 공지사항</span>
+    <div id="tickerText">[필독] WAGERWELL은 실제 현금 거래가 없는 가상 카지노 게임입니다.</div>
+    <span class="ticker-clock">24H ONLINE ●</span>
+  </div>
+</div>
+
+<main class="site-width body-grid">
+  <aside class="left-rail">
+    <section class="rail-box menu-box">
+      <h3>게임 메뉴 <small>GAME MENU</small></h3>
+      <button data-game="baccarat"><b>LIVE</b> 바카라 <span>▶</span></button>
+      <button data-game="slots"><b>HOT</b> 슬롯게임 <span>▶</span></button>
+      <button data-game="roulette"><b>NEW</b> 룰렛 <span>▶</span></button>
+      <button data-game="blackjack"><b>21</b> 블랙잭 <span>▶</span></button>
+    </section>
+
+    <section class="support-box">
+      <div class="support-title">24시간 고객센터</div>
+      <strong>WAGERWELL</strong>
+      <p>게임 문의 / 오류 접수<br>24H ALWAYS ONLINE</p>
+      <button data-scroll="history">1:1 문의내역</button>
+    </section>
+
+    <div class="vertical-ad ad-red" data-cause="0" role="button" tabindex="0">
+      <span class="ad-chip">긴급</span><small>GOOD PROJECT #01</small>
+      <b>유기동물<br>겨울 담요 지원</b>
+      <strong>목표 50,000 C</strong><em>지금 참여 ▶</em>
+    </div>
+    <div class="vertical-ad ad-purple" data-cause="2" role="button" tabindex="0">
+      <span class="ad-chip">NEW</span><small>GOOD PROJECT #03</small>
+      <b>작은 도서관<br>새 책 채우기</b>
+      <strong>목표 90,000 C</strong><em>바로가기 ▶</em>
+    </div>
+
+    <section class="safe-box">
+      <b>VIRTUAL ONLY</b>
+      <p>현금 가치 없음<br>입금 / 출금 / 환전 없음<br>실제 기부 연동 없음</p>
+    </section>
+  </aside>
+
+  <section class="center-stage">
+    <div class="top-banners">
+      <div class="mega-banner casino-banner" data-game="baccarat" role="button" tabindex="0">
+        <div class="banner-copy">
+          <span class="gold-label">WAGERWELL LIVE</span>
+          <small>PREMIUM BACCARAT OPEN 24 HOURS</small>
+          <h1>라이브<br><em>바카라</em></h1>
+          <p>빠른 진행 · 가상코인 전용 · 즉시 플레이</p>
+          <button data-game="baccarat">GAME START ▶</button>
+        </div>
+        <div class="dealer-scene" aria-hidden="true">
+          <div class="neon-ring"></div><div class="dealer"><span></span><i></i></div>
+          <div class="table-oval"><b>PLAYER</b><strong>BANKER</strong></div>
+          <div class="floating-card c1">A♠</div><div class="floating-card c2 red-card">9♥</div>
+        </div>
+        <div class="jackpot-box"><small>LIVE JACKPOT</small><b>88,764,220</b><span>VIRTUAL COIN</span></div>
+      </div>
+      <div class="side-banners">
+        <button class="micro-banner bonus" id="claimPromo"><small>WELCOME BONUS</small><b>매일 무료코인<br><em>3,000 C</em></b><span>무료충전 바로가기 ▶</span></button>
+        <button class="micro-banner charity" data-cause="3"><small>HOT PROJECT</small><b>🌊 해변 정화<br>긴급 프로젝트</b><span>가상코인 참여 ▶</span></button>
+      </div>
+    </div>
+
+    <div class="quick-events">
+      <button data-cause="0"><span class="event-badge red">긴급</span><b>보호소 겨울담요 지원</b><small>현재 진행중</small></button>
+      <button data-cause="1"><span class="event-badge yellow">HOT</span><b>따뜻한 한 끼 500인분</b><small>오늘 마감</small></button>
+      <button data-cause="2"><span class="event-badge blue">NEW</span><b>도서관 새 책 채우기</b><small>신규 프로젝트</small></button>
+      <button data-cause="3"><span class="event-badge green">LIVE</span><b>바다 쓰레기 수거 작전</b><small>실시간 진행</small></button>
+    </div>
+
+    <section id="games" class="casino-section">
+      <div class="section-title">
+        <div><span class="title-icon">♠</span><b>LIVE CASINO</b><small>실시간 테이블 게임</small></div>
+        <span class="room-status"><i></i> 24시간 정상운영</span>
+      </div>
+      <div class="provider-tabs">
+        <button class="selected">전체게임</button><button>WW LIVE</button><button>ROYAL</button><button>LOTUS</button><button>PREMIER</button><button>CLASSIC</button>
+      </div>
+      <div class="live-grid">
+        <button class="live-card red-room" data-game="baccarat">
+          <span class="room-top"><b>LIVE</b><small>TABLE 01</small></span>
+          <span class="room-view"><i class="dealer-mini"></i><em class="table-mini"></em><strong>BACCARAT A</strong></span>
+          <span class="room-bottom"><span><b>스피드 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+        <button class="live-card blue-room" data-game="baccarat">
+          <span class="room-top"><b>LIVE</b><small>TABLE 02</small></span>
+          <span class="room-view"><i class="dealer-mini"></i><em class="table-mini"></em><strong>ROYAL BACCARAT</strong></span>
+          <span class="room-bottom"><span><b>로얄 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+        <button class="live-card purple-room" data-game="baccarat">
+          <span class="room-top"><b>HOT</b><small>TABLE 03</small></span>
+          <span class="room-view"><i class="dealer-mini"></i><em class="table-mini"></em><strong>VIP BACCARAT</strong></span>
+          <span class="room-bottom"><span><b>VIP 바카라</b><small>MIN 500 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+        <button class="live-card green-room" data-game="blackjack">
+          <span class="room-top"><b>LIVE</b><small>TABLE 04</small></span>
+          <span class="room-view"><i class="dealer-mini"></i><em class="table-mini"></em><strong>BLACKJACK</strong></span>
+          <span class="room-bottom"><span><b>클래식 블랙잭</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+        <button class="live-card gold-room" data-game="baccarat">
+          <span class="room-top"><b>NEW</b><small>TABLE 05</small></span>
+          <span class="room-view"><i class="dealer-mini"></i><em class="table-mini"></em><strong>NO COMMISSION</strong></span>
+          <span class="room-bottom"><span><b>노커미션 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+        <button class="live-card cyan-room" data-game="roulette">
+          <span class="room-top"><b>LIVE</b><small>TABLE 06</small></span>
+          <span class="room-view roulette-preview"><i>◎</i><strong>EUROPE ROULETTE</strong></span>
+          <span class="room-bottom"><span><b>유러피안 룰렛</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span>
+        </button>
+      </div>
+    </section>
+
+    <div class="wide-ad" data-cause="1" role="button" tabindex="0">
+      <span class="burst">HOT</span>
+      <div><small>WAGERWELL GOOD EVENT</small><b>🍱 오늘 딴 코인, 오늘의 한 끼로!</b><span>따뜻한 식사 500인분 프로젝트 진행률 확인하기</span></div>
+      <strong>지금 참여하기 ▶</strong>
+    </div>
+
+    <section class="casino-section mini-section">
+      <div class="section-title">
+        <div><span class="title-icon">♛</span><b>SLOT & MINI GAME</b><small>미니게임</small></div>
+        <span class="room-status"><i></i> GAME OPEN</span>
+      </div>
+      <div class="mini-game-grid">
+        <button class="slot-room" data-game="slots"><span class="slot-visual"><i>7</i><i>7</i><i>7</i></span><b>LUCKY 777</b><small>3 REEL SLOT · HOT</small></button>
+        <button class="slot-room roulette-room" data-game="roulette"><span class="roulette-disc">0</span><b>EUROPE ROULETTE</b><small>0 - 36 · LIVE</small></button>
+        <button class="slot-room bj-room" data-game="blackjack"><span class="big-21">21</span><b>BLACKJACK</b><small>HIT / STAND · CLASSIC</small></button>
+      </div>
+    </section>
+
+    <section id="causes" class="casino-section event-section">
+      <div class="section-title">
+        <div><span class="title-icon">★</span><b>EVENT & PROMOTION</b><small>게임 속 선행 광고</small></div>
+        <span class="room-status gold-text">AD ZONE</span>
+      </div>
+      <div id="causeGrid" class="cause-grid"></div>
+    </section>
+
+    <section id="history" class="casino-section history-section">
+      <div class="section-title">
+        <div><span class="title-icon">₩</span><b>MONEY HISTORY</b><small>가상 코인 이용내역</small></div>
+        <button id="resetBtn" class="reset-btn">내역 초기화</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </section>
+
+  <aside class="right-rail">
+    <section class="wallet-box">
+      <h3>MY MONEY <small>VIRTUAL</small></h3>
+      <p>보유 가상머니</p>
+      <strong>ⓒ <span id="sideBalance">10,000</span></strong>
+      <button id="rightClaimBtn">무료 가상머니 충전</button>
+      <small>현금 결제 / 환전 기능 없음</small>
+    </section>
+
+    <section class="realtime-box">
+      <h3><span>●</span> 실시간 당첨현황</h3>
+      <div class="win-row"><b>q***12</b><span>바카라</span><strong>+12,800</strong></div>
+      <div class="win-row"><b>r***77</b><span>슬롯</span><strong>+8,400</strong></div>
+      <div class="win-row"><b>k***09</b><span>룰렛</span><strong>+22,000</strong></div>
+      <div class="win-row"><b>p***31</b><span>바카라</span><strong>+5,600</strong></div>
+      <div class="win-row"><b>m***88</b><span>블랙잭</span><strong>+14,200</strong></div>
+      <small class="fake-note">※ 연출용 가상 기록</small>
+    </section>
+
+    <div class="right-ad-banner ad-gold" data-cause="1" role="button" tabindex="0">
+      <span>EVENT</span><small>GOOD CAUSE #02</small><b>🍱 급식지원<br>500인분 돌파전</b><strong>참여하기 ▶</strong>
+    </div>
+    <div class="right-ad-banner ad-blue" data-cause="3" role="button" tabindex="0">
+      <span>HOT</span><small>GOOD CAUSE #04</small><b>🌊 바다정화<br>오늘의 미션</b><strong>참여하기 ▶</strong>
+    </div>
+
+    <section class="impact-panel">
+      <h3>MY GOOD MONEY</h3>
+      <p>누적 사용 코인</p><strong id="impactTotal">0</strong>
+      <p>참여 횟수</p><strong id="impactCount">0</strong>
+    </section>
+
+    <section class="bank-notice">
+      <b>중요 안내</b>
+      <p>WAGERWELL의 모든 머니는 게임 내 가상 재화입니다. 실제 입금·출금·환전·송금·기부는 지원하지 않습니다.</p>
+    </section>
+  </aside>
 </main>
-<footer class="bottom"><div class="wrap bottom-in"><b>WAGER<span>WELL</span> <small>© 2026</small></b><span>FICTIONAL CASINO ARCADE · VIRTUAL COINS ONLY · NO DEPOSITS · NO WITHDRAWALS · NO REAL-WORLD CHARITY TRANSFERS</span></div></footer>
-<div id="modal" class="modal hidden" aria-hidden="true"><div class="modal-shade" data-close="1"></div><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog-top"><div><span id="modalKicker">GAME FLOOR</span><h2 id="modalTitle"></h2></div><button id="closeModal" aria-label="닫기">✕</button></div><div id="modalBody" class="dialog-body"></div></section></div>
+
+<footer class="site-footer">
+  <div class="site-width">
+    <b>WAGERWELL</b>
+    <span>VIRTUAL CASINO GAME · NO REAL MONEY · NO CASHOUT · FICTIONAL GOOD-CAUSE PROJECTS</span>
+  </div>
+</footer>
+
+<div id="modal" class="modal hidden" aria-hidden="true">
+  <div class="modal-shade" data-close="1"></div>
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="dialog-top"><div><span id="modalKicker">LIVE GAME</span><h2 id="modalTitle"></h2></div><button id="closeModal" aria-label="닫기">✕</button></div>
+    <div id="modalBody" class="dialog-body"></div>
+  </section>
+</div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-</body></html>
+</body>
+</html>
