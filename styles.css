@@ -246,3 +246,162 @@ body{padding-bottom:0!important;background:#02060c;background-image:radial-gradi
   .casino-front-v2{grid-template-columns:190px minmax(0,1fr) 210px;gap:8px}
   .v2-promo-grid{grid-template-columns:minmax(0,1fr) 238px;gap:7px}
 }
+
+
+/* v0.6.2 — overlap/spacing fix */
+.v2-hero:before{
+  opacity:.34;
+  background:
+    linear-gradient(90deg,#06090dd8 0,#0a0d1298 34%,transparent 64%),
+    repeating-linear-gradient(0deg,transparent 0 4px,#ffffff12 4px 5px);
+  background-size:auto,100% 5px;
+}
+
+.casino-front-v2{
+  gap:10px;
+}
+
+.v2-left,
+.v2-right{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.v2-account,
+.v2-category,
+.v2-livewins,
+.v2-notices,
+.v2-support,
+.v2-side-ad{
+  margin-bottom:0;
+}
+
+.v2-promo-grid{
+  height:286px;
+  min-height:286px;
+  gap:9px;
+  margin-bottom:10px;
+  align-items:stretch;
+}
+
+.v2-promo-stack{
+  gap:9px;
+  min-height:0;
+}
+
+.v2-promo{
+  min-height:0;
+  padding:11px 13px;
+  overflow:hidden;
+}
+
+.v2-promo small{margin-bottom:2px}
+.v2-promo b{line-height:1.15}
+.v2-promo strong{line-height:1.05}
+.v2-promo span{margin-top:2px}
+
+.v2-provider-strip{
+  height:110px;
+  gap:6px;
+  margin-bottom:10px;
+}
+
+.provider-card{
+  padding:11px 13px;
+  overflow:hidden;
+}
+
+.v2-live-title{
+  margin-bottom:6px;
+}
+
+.v2-room-grid{
+  height:226px;
+  gap:6px;
+  margin-top:0;
+  align-items:stretch;
+}
+
+.v2-room{
+  min-height:0;
+}
+
+.v2-video{
+  height:112px;
+  flex:none;
+}
+
+.v2-road{
+  height:39px;
+  padding:4px 5px;
+}
+
+.v2-room-foot{
+  height:52px;
+  padding:7px 8px;
+}
+
+.v2-room-foot>span{
+  gap:2px;
+}
+
+.v2-side-ad{
+  height:156px;
+  padding:12px;
+}
+
+.v2-right-ad{
+  height:156px;
+  padding:12px;
+}
+
+.v2-livewins>div:not(.v2-panel-title){
+  padding:7px 9px;
+}
+
+.v2-notices p{
+  min-height:34px;
+  height:auto;
+  padding:7px 9px;
+}
+
+.v2-support{
+  padding-bottom:10px;
+}
+
+.v2-bottom-ads{
+  margin-top:8px;
+  gap:6px;
+}
+
+.v2-bottom-ads button{
+  padding:6px 8px;
+}
+
+.v2-hero,
+.v2-promo,
+.provider-card,
+.v2-room,
+.v2-side-ad,
+.v2-right-ad{
+  isolation:isolate;
+}
+
+.v2-side-ad:after,
+.provider-card:before{
+  z-index:-1;
+}
+
+@media(max-width:1500px){
+  .v2-promo-grid{
+    height:278px;
+    min-height:278px;
+  }
+  .v2-room-grid{
+    height:auto;
+  }
+  .v2-room{
+    height:214px;
+  }
+}
