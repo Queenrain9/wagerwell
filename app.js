@@ -15,7 +15,7 @@ const el=id=>document.getElementById(id);
 function store(){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(_){}}
 function log(title,delta,detail){s.history.unshift({title,delta,detail,ts:new Date().toLocaleString("ko-KR")});s.history=s.history.slice(0,20);}
 function showToast(msg){const t=el("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2800);}
-function wallet(){el("balance").textContent=fmt(s.coins);el("sideBalance").textContent=fmt(s.coins);el("impactTotal").textContent=fmt(s.total);el("impactCount").textContent=fmt(s.count);el("claimBtn").textContent=s.coins<500?"+ 무료 구제 코인 받기":s.claimed===new Date().toLocaleDateString("en-CA")?"오늘의 무료 코인 수령 완료":"+ 무료 코인 받기";}
+function wallet(){el("balance").textContent=fmt(s.coins);el("sideBalance").textContent=fmt(s.coins);if(el("firstBalance"))el("firstBalance").textContent=fmt(s.coins);el("impactTotal").textContent=fmt(s.total);el("impactCount").textContent=fmt(s.count);el("claimBtn").textContent=s.coins<500?"+ 무료 구제 코인 받기":s.claimed===new Date().toLocaleDateString("en-CA")?"오늘의 무료 코인 수령 완료":"+ 무료 코인 받기";}
 function save(){store();wallet();renderHistory();renderCauses();}
 function expense(n){if(!Number.isSafeInteger(n)||n<=0||n>s.coins){showToast("보유 코인보다 큰 금액은 사용할 수 없어요.");return false;}s.coins-=n;return true;}
 function amount(){let n=Number(el("betInput")?.value);if(!Number.isSafeInteger(n)||n<1||n>1000000){showToast("베팅 금액은 1~1,000,000 코인입니다.");return null;}return n;}
@@ -46,7 +46,7 @@ function openRoulette(){open("ROULETTE","GAME 04 / TABLE",betControl()+'<div cla
 function startGame(g){if(g==="slots")openSlots();else if(g==="baccarat")openBaccarat();else if(g==="blackjack")openBlackjack();else if(g==="roulette")openRoulette();}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-game],[data-scroll],[data-cause],[data-close],[data-bet]");if(!b)return;if(b.dataset.close){close();return;}if(b.dataset.bet){const input=el("betInput");if(!input||input.disabled)return;input.value=b.dataset.bet==="max"?Math.max(1,Math.min(1000000,s.coins)):b.dataset.bet;return;}if(b.dataset.game){startGame(b.dataset.game);return;}if(b.dataset.cause!==undefined){openCause(Number(b.dataset.cause));return;}if(b.dataset.scroll){el(b.dataset.scroll)?.scrollIntoView({behavior:"smooth",block:"start"});}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!el("modal").classList.contains("hidden"))close();if((e.key==="Enter"||e.key===" ")&&e.target.matches("[role=button][data-cause]")){e.preventDefault();openCause(Number(e.target.dataset.cause));}});
-el("closeModal").onclick=close;el("claimBtn").onclick=claim;if(el("rightClaimBtn"))el("rightClaimBtn").onclick=claim;if(el("claimPromo"))el("claimPromo").onclick=claim;el("resetBtn").onclick=()=>{if(!confirm("현재 브라우저에 저장된 코인·게임 기록·가상 후원 내역을 초기화할까요?"))return;s=seed();save();showToast("데모 데이터를 초기화했어요.");};
+el("closeModal").onclick=close;el("claimBtn").onclick=claim;if(el("firstClaim"))el("firstClaim").onclick=claim;if(el("firstPromoClaim"))el("firstPromoClaim").onclick=claim;if(el("rightClaimBtn"))el("rightClaimBtn").onclick=claim;if(el("claimPromo"))el("claimPromo").onclick=claim;el("resetBtn").onclick=()=>{if(!confirm("현재 브라우저에 저장된 코인·게임 기록·가상 후원 내역을 초기화할까요?"))return;s=seed();save();showToast("데모 데이터를 초기화했어요.");};
 wallet();renderCauses();renderHistory();
 
 el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영중   ◆   신규 가상머니 무료충전 이벤트   ◆   GOOD PROJECT 오늘의 추천 오픈   ◆   모든 머니는 현금 가치가 없는 가상 코인입니다.";
