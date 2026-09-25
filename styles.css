@@ -4,3 +4,61 @@
 @media(max-width:1150px){.body-grid{grid-template-columns:160px minmax(0,1fr)}.right-rail{display:none}.header-grid{grid-template-columns:260px 1fr 250px}.top-banners{grid-template-columns:1fr 190px}.nav-row{overflow-x:auto}.nav-row button{min-width:98px}.live-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:820px){.site-width{width:min(100% - 12px,1500px)}.legal-note,.header-flash{display:none}.header-grid{height:74px;grid-template-columns:1fr 200px}.crest{width:43px;height:43px;font-size:23px}.logo-text{font-size:24px;line-height:21px}.main-nav{height:43px}.body-grid{display:block}.left-rail{display:none}.top-banners{grid-template-columns:1fr}.side-banners{grid-template-columns:1fr 1fr;grid-template-rows:auto}.micro-banner{min-height:90px}.quick-events{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){.header-grid{grid-template-columns:1fr 150px}.casino-logo{gap:5px}.crest{display:none}.logo-text{font-size:22px}.user-line{display:none}.money-line{margin:3px 0}.money-line>span{display:none}.user-actions button{font-size:8px}.top-banners{display:block}.mega-banner{height:260px}.side-banners{margin-top:6px}.dealer-scene{opacity:.58;width:58%;right:0}.banner-copy{left:17px;top:24px}.banner-copy h1{font-size:46px}.jackpot-box{display:none}.quick-events{grid-template-columns:1fr 1fr}.live-grid{grid-template-columns:1fr 1fr;gap:5px;padding:5px}.room-view{height:95px}.provider-tabs{overflow-x:auto}.provider-tabs button{white-space:nowrap}.mini-game-grid{grid-template-columns:1fr 1fr}.mini-game-grid .slot-room:last-child{grid-column:1/-1}.cause-grid{grid-template-columns:1fr}.wide-ad{padding:8px}.wide-ad>strong{display:none}.site-footer .site-width{flex-direction:column;align-items:flex-start;padding:10px 0}.ticker-clock{display:none}}
+
+
+/* v0.3 — intentionally dense private-casino portal treatment */
+body{background-color:#03060b;background-image:radial-gradient(circle at 50% -120px,#1b2c44 0,#050910 34%),repeating-linear-gradient(90deg,#ffffff05 0 1px,transparent 1px 18px)}
+.casino-head{box-shadow:0 4px 20px #000, inset 0 -1px #583000}
+.mega-nav{position:relative;z-index:20}
+.mega-nav:after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:4px;background:repeating-linear-gradient(90deg,#f5c445 0 34px,#7b050b 34px 68px);opacity:.8}
+.head-banner,.tower-ad,.right-ad-banner,.micro-banner,.wide-ad{animation:adGlow 2.2s ease-in-out infinite alternate}
+@keyframes adGlow{from{filter:brightness(.91)}to{filter:brightness(1.13)}}
+.live-card:nth-child(1),.live-card:nth-child(3),.casino-room:nth-child(1),.casino-room:nth-child(3){box-shadow:inset 0 0 22px #e2112112}
+.live-card .room-top b,.casino-room .room-head b{animation:liveBlink 1.15s steps(2,end) infinite}
+@keyframes liveBlink{50%{opacity:.55}}
+.realtime-box,.live-win{position:relative;overflow:hidden}
+.realtime-box:after,.live-win:after{content:"REALTIME";position:absolute;right:-19px;top:44px;transform:rotate(90deg);font:900 7px Arial;color:#4fe18755;letter-spacing:2px}
+.fake-win-strip{margin:7px 0;border:1px solid #293b50;background:#07101a;display:grid;grid-template-columns:92px 1fr 100px;height:31px;align-items:center;overflow:hidden}
+.fake-win-strip>span:first-child{height:100%;display:flex;align-items:center;justify-content:center;background:#a60912;color:#ffd9dc;font-weight:900;font-size:8px}
+.fake-win-strip .fake-win-marquee{white-space:nowrap;overflow:hidden;color:#b8c5d4;font-size:8px;padding:0 10px}
+.fake-win-strip .fake-win-marquee b{color:#62e994;margin:0 12px}
+.fake-win-strip>em{font-style:normal;text-align:center;color:#d9ac40;font-size:7px}
+.extra-live-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 6px 6px}
+.extra-live-grid .casino-room{min-width:0}
+.room-view.fake-stream:before,.room-thumb.fake-stream:before{content:"LIVE";position:absolute;z-index:4;left:5px;top:5px;background:#c80e18;color:#fff;padding:2px 5px;font:900 6px Arial;box-shadow:0 0 8px #e21628}
+.room-view.fake-stream:after,.room-thumb.fake-stream:after{content:"● 1,248";position:absolute;z-index:4;right:5px;top:5px;background:#05080baa;color:#fff;padding:2px 4px;font:700 6px Arial}
+.popup-layer{position:fixed;inset:0;z-index:70;pointer-events:none}
+.popup-ad-card{pointer-events:auto;position:absolute;width:284px;min-height:228px;border:3px solid #e0ad38;background:radial-gradient(circle at 50% 20%,#7b131d,#23070b 68%);box-shadow:0 0 0 3px #5f3707,0 18px 55px #000d,inset 0 0 35px #0008;text-align:center;padding:17px 14px 13px}
+.popup-ad-card.popup-left{left:50%;top:178px;transform:translateX(-330px)}
+.popup-ad-card.popup-right{left:50%;top:206px;transform:translateX(48px);background:radial-gradient(circle at 50% 20%,#174f70,#061924 70%);border-color:#52a8c7;box-shadow:0 0 0 3px #153f50,0 18px 55px #000d,inset 0 0 35px #0008}
+.popup-close{position:absolute;right:6px;top:5px;width:24px;height:24px;border:1px solid #e9c158;background:#100809;color:#fff;font-size:15px;line-height:20px}
+.popup-ad-card .pop-tag{display:inline-block;background:#f0c13c;color:#3a1e00;padding:4px 8px;font:900 8px Arial;letter-spacing:.5px}
+.popup-right .pop-tag{background:#50c4e6;color:#05202a}
+.popup-ad-card small{display:block;color:#e8b75d;font-size:8px;font-weight:900;margin:9px 0 4px}
+.popup-right small{color:#7fd5ee}
+.popup-ad-card h2{font-size:26px;line-height:1.15;margin:5px 0;text-shadow:0 2px #000}
+.popup-ad-card h2 em{font-style:normal;color:#ffd34d;font-size:32px}
+.popup-ad-card p{color:#bda8a8;font-size:8px;line-height:1.5}
+.popup-ad-card .pop-action{width:100%;height:36px;border:1px solid #ffd66b;background:linear-gradient(#efc342,#9f690a);color:#2f1900;font-weight:900;font-size:10px}
+.popup-right .pop-action{background:linear-gradient(#42b5dc,#17607c);border-color:#81d7f3;color:#fff}
+.popup-today{position:absolute;left:50%;top:450px;transform:translateX(-50%);pointer-events:auto;background:#05090edf;border:1px solid #2d3d50;padding:6px 11px;color:#8c9aae;font-size:8px}
+.popup-layer.hidden{display:none}
+.float-help{position:fixed;right:14px;top:46%;z-index:45;width:96px;box-shadow:0 8px 28px #000b}
+.float-help button{display:block;width:100%;height:31px;border:1px solid #3e4c5e;border-bottom:0;background:#111d2b;color:#cbd5df;font-size:8px;font-weight:800}
+.float-help button:first-child{height:46px;background:linear-gradient(#d61621,#7d0309);border-color:#e4434c;color:#fff}
+.float-help button:last-child{border-bottom:1px solid #3e4c5e}
+.float-help b{display:block;font-size:11px}
+.float-help span{font-size:7px;color:#ffd15b}
+.bottom-quick{position:fixed;left:0;right:0;bottom:0;z-index:44;height:39px;background:#080e16ef;border-top:2px solid #a70b13;box-shadow:0 -5px 17px #000a;backdrop-filter:blur(5px)}
+.bottom-quick>div{height:100%;display:flex;align-items:center}
+.bottom-quick span{color:#55dc87;font-size:8px;font-weight:900;margin-right:auto}
+.bottom-quick span i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4be17f;box-shadow:0 0 8px #4be17f;margin-right:4px}
+.bottom-quick button{height:27px;margin-left:4px;border:1px solid #3b4c60;background:#182638;padding:0 15px;font-size:8px;font-weight:900}
+.bottom-quick button.hot{background:linear-gradient(#d31a25,#84050c);border-color:#ef3e48}
+.bottom-quick em{font-style:normal;margin-left:12px;color:#6e7d8e;font-size:7px}
+.notice-ticker,.rolling-notice{overflow:hidden}
+.side.left,.side.right{position:relative}
+body.popup-dismissed .popup-layer{display:none}
+@media(max-width:1150px){.extra-live-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.float-help{right:5px;width:82px}.popup-ad-card.popup-left{transform:translateX(-300px)}.popup-ad-card.popup-right{transform:translateX(20px)}}
+@media(max-width:820px){.popup-ad-card{width:238px}.popup-ad-card.popup-left{left:8px;transform:none}.popup-ad-card.popup-right{right:8px;left:auto;transform:none}.popup-today{top:430px}.float-help{display:none}.bottom-quick button{padding:0 8px}}
+@media(max-width:560px){.popup-layer{display:none!important}.extra-live-grid{grid-template-columns:repeat(2,1fr)}.bottom-quick em{display:none}.bottom-quick button{font-size:7px;padding:0 6px}.fake-win-strip{grid-template-columns:75px 1fr}.fake-win-strip>em{display:none}}
