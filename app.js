@@ -48,5 +48,59 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-game],[dat
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!el("modal").classList.contains("hidden"))close();if((e.key==="Enter"||e.key===" ")&&e.target.matches("[role=button][data-cause]")){e.preventDefault();openCause(Number(e.target.dataset.cause));}});
 el("closeModal").onclick=close;el("claimBtn").onclick=claim;if(el("rightClaimBtn"))el("rightClaimBtn").onclick=claim;if(el("claimPromo"))el("claimPromo").onclick=claim;el("resetBtn").onclick=()=>{if(!confirm("현재 브라우저에 저장된 코인·게임 기록·가상 후원 내역을 초기화할까요?"))return;s=seed();save();showToast("데모 데이터를 초기화했어요.");};
 wallet();renderCauses();renderHistory();
-el("tickerText").textContent="● LIVE | 무료 가상 코인 지급 중   ◆   보호소 담요 프로젝트 OPEN   ◆   바카라 · 블랙잭 · 슬롯 · 룰렛 정상 운영 중   ◆   모든 선행은 게임 속 가상 프로젝트입니다.";
+
+el("tickerText").textContent="● LIVE | 바카라 전 테이블 정상 운영중   ◆   신규 가상머니 무료충전 이벤트   ◆   GOOD PROJECT 오늘의 추천 오픈   ◆   모든 머니는 현금 가치가 없는 가상 코인입니다.";
+
+(function enhanceCasinoPortal(){
+  const main=document.querySelector(".center-stage");
+  const grid=document.querySelector(".live-grid");
+  if(grid){
+    const extra=document.createElement("div");
+    extra.className="extra-live-grid";
+    extra.innerHTML=
+      '<button class="game-tile bac-tile casino-room" data-game="baccarat"><span class="room-top"><b>LIVE</b><small>TABLE 07</small></span><span class="room-view fake-stream"><i class="dealer-mini"></i><em class="table-mini"></em><strong>NIGHT BACCARAT</strong></span><span class="roadmap"><i class="p"></i><i class="b"></i><i class="p"></i><i class="b"></i><i class="b"></i><i class="p"></i><i class="p"></i><i class="t"></i></span><span class="room-bottom"><span><b>나이트 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span></button>'+
+      '<button class="game-tile bac-tile casino-room" data-game="baccarat"><span class="room-top"><b>HOT</b><small>TABLE 08</small></span><span class="room-view fake-stream" style="background:radial-gradient(circle,#70264d,#1d0914)"><i class="dealer-mini"></i><em class="table-mini"></em><strong>RAPID BACCARAT</strong></span><span class="roadmap"><i class="b"></i><i class="p"></i><i class="b"></i><i class="p"></i><i class="t"></i><i class="p"></i><i class="b"></i><i class="b"></i></span><span class="room-bottom"><span><b>래피드 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span></button>'+
+      '<button class="game-tile bac-tile casino-room" data-game="baccarat"><span class="room-top"><b>VIP</b><small>TABLE 09</small></span><span class="room-view fake-stream" style="background:radial-gradient(circle,#6a4d18,#1b1305)"><i class="dealer-mini"></i><em class="table-mini"></em><strong>GOLD BACCARAT</strong></span><span class="roadmap"><i class="p"></i><i class="p"></i><i class="b"></i><i class="b"></i><i class="p"></i><i class="t"></i><i class="b"></i><i class="p"></i></span><span class="room-bottom"><span><b>골드 바카라</b><small>MIN 500 C · OPEN</small></span><i>입장 ▶</i></span></button>'+
+      '<button class="game-tile bac-tile casino-room" data-game="baccarat"><span class="room-top"><b>LIVE</b><small>TABLE 10</small></span><span class="room-view fake-stream" style="background:radial-gradient(circle,#254b5f,#071621)"><i class="dealer-mini"></i><em class="table-mini"></em><strong>CLASSIC BACCARAT</strong></span><span class="roadmap"><i class="b"></i><i class="b"></i><i class="p"></i><i class="p"></i><i class="t"></i><i class="b"></i><i class="p"></i><i class="p"></i></span><span class="room-bottom"><span><b>클래식 바카라</b><small>MIN 100 C · OPEN</small></span><i>입장 ▶</i></span></button>';
+    grid.insertAdjacentElement("afterend",extra);
+  }
+
+  const quick=document.querySelector(".quick-events");
+  if(quick){
+    const strip=document.createElement("div");
+    strip.className="fake-win-strip";
+    strip.innerHTML='<span>실시간 당첨</span><div class="fake-win-marquee">q***12 <b>+12,800 C</b>　k***09 <b>+22,000 C</b>　m***88 <b>+14,200 C</b>　p***31 <b>+5,600 C</b></div><em>연출용 가상 기록</em>';
+    quick.insertAdjacentElement("afterend",strip);
+  }
+
+  const layer=document.createElement("div");
+  layer.className="popup-layer";
+  layer.id="promoLayer";
+  layer.innerHTML=
+    '<div class="popup-ad-card popup-left"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">WELCOME BONUS</span><small>WAGERWELL 신규회원 이벤트</small><h2>매일 무료 가상머니<br><em>3,000 C</em> 지급</h2><p>현금 가치가 없는 게임용 가상 코인입니다.</p><button class="pop-action" id="popupClaim">무료충전 받기 ▶</button></div>'+
+    '<div class="popup-ad-card popup-right"><button class="popup-close" data-popup-close>×</button><span class="pop-tag">GOOD EVENT</span><small>오늘의 추천 프로젝트</small><h2>🐾 보호소<br>겨울 담요 지원</h2><p>게임에서 얻은 가상 코인으로 참여할 수 있습니다.</p><button class="pop-action" data-cause="0">프로젝트 보기 ▶</button></div>'+
+    '<label class="popup-today"><input type="checkbox" id="hidePromo"> 오늘은 팝업 그만 보기</label>';
+  document.body.append(layer);
+
+  const helper=document.createElement("div");
+  helper.className="float-help";
+  helper.innerHTML='<button data-scroll="history"><span>24H ONLINE</span><b>고객센터</b></button><button data-scroll="history">1:1 문의</button><button data-scroll="causes">이벤트</button><button id="floatClaim">무료충전</button>';
+  document.body.append(helper);
+
+  const dock=document.createElement("div");
+  dock.className="bottom-quick";
+  dock.innerHTML='<div class="site-width"><span><i></i> WAGERWELL LIVE</span><button class="hot" data-game="baccarat">바카라 바로입장</button><button id="dockClaim">무료 가상머니</button><button data-scroll="causes">진행중 이벤트</button><em>VIRTUAL COIN ONLY</em></div>';
+  document.body.append(dock);
+
+  const key="wagerwell-hide-promo";
+  const today=new Date().toLocaleDateString("en-CA");
+  try{if(localStorage.getItem(key)===today)layer.classList.add("hidden");}catch(_){}
+  layer.querySelectorAll("[data-popup-close]").forEach(btn=>btn.addEventListener("click",()=>layer.classList.add("hidden")));
+  const hide=layer.querySelector("#hidePromo");
+  if(hide)hide.addEventListener("change",()=>{if(hide.checked){try{localStorage.setItem(key,today);}catch(_){}layer.classList.add("hidden");}});
+  const popClaim=layer.querySelector("#popupClaim");
+  if(popClaim)popClaim.addEventListener("click",()=>{claim();layer.classList.add("hidden");});
+  const fc=document.getElementById("floatClaim"); if(fc)fc.addEventListener("click",claim);
+  const dc=document.getElementById("dockClaim"); if(dc)dc.addEventListener("click",claim);
+})();
 })();
