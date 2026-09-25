@@ -353,7 +353,68 @@ function openRoulette(){
     Object.keys(bets).forEach(k=>delete bets[k]);render();
   };
 }
-function startGame(g){if(g==="slots")openSlots();else if(g==="baccarat")openBaccarat();else if(g==="blackjack")openBlackjack();else if(g==="roulette")openRoulette();}
+function startInternalGame(g){
+  if(g==="slots")openSlots();
+  else if(g==="baccarat")openBaccarat();
+  else if(g==="blackjack")openBlackjack();
+  else if(g==="roulette")openRoulette();
+}
+
+function providerGameId(g){
+  const ids=window.WAGERWELL_PROVIDER?.gameIds||{};
+  return ids[g]||g;
+}
+
+function openExternalProviderGame(url,g,launchMode="iframe"){
+  if(launchMode==="redirect"){
+    window.location.assign(url);
+    return;
+  }
+  open(
+    String(g||"GAME").toUpperCase(),
+    "EVOLUTION · LIVE GAME",
+    '<div class="external-game-shell"><iframe src="'+url.replace(/"/g,"&quot;")+'" title="Evolution game" allow="fullscreen; autoplay" referrerpolicy="no-referrer"></iframe></div>',
+    "external"
+  );
+}
+
+async function startGame(g){
+  const cfg=window.WAGERWELL_PROVIDER||{mode:"sim"};
+  if(cfg.mode!=="evolution"){
+    startInternalGame(g);
+    return;
+  }
+
+  const base=String(cfg.backendBase||"").replace(/\/$/,"");
+  if(!base){
+    showToast("Evolution 서버 주소가 아직 설정되지 않았습니다.");
+    startInternalGame(g);
+    return;
+  }
+
+  try{
+    const response=await fetch(base+"/api/game/launch",{
+      method:"POST",
+      headers:{"content-type":"application/json"},
+      body:JSON.stringify({
+        gameId:providerGameId(g),
+        playerId:"wagerwell-browser-player",
+        sessionId:crypto?.randomUUID?.()||("ww-"+Date.now()),
+        currency:"KRW",
+        language:"ko",
+        country:"KR",
+        returnUrl:location.href
+      })
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.url)throw new Error(data.error||"Evolution game launch failed");
+    openExternalProviderGame(data.url,g,data.launchMode||cfg.launchMode||"iframe");
+  }catch(error){
+    console.error(error);
+    showToast("Evolution 연결이 아직 활성화되지 않아 WAGERWELL 게임으로 실행합니다.");
+    startInternalGame(g);
+  }
+}
 
 const pageKeys=["home","live","slots","roulette","blackjack","events","money","notice","support"];
 function renderPortalPage(key,{push=false}={}){
