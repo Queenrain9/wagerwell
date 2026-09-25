@@ -700,3 +700,72 @@ section.v2-bottom-ads[data-page-section].page-active{display:grid!important}
   .category-shell-grid,.game-shell-grid,.table-shell-grid,.event-shell-grid,.money-shell-summary{grid-template-columns:1fr}
   .filter-shell{overflow-x:auto}.filter-shell>*{flex:none}.filter-shell em{display:none}
 }
+
+
+/* v1.1 — persistent three-column application shell
+   Left/right rails are shared site chrome; only center content routes. */
+.casino-app-shell{
+  display:grid;
+  grid-template-columns:214px minmax(0,1fr) 232px;
+  gap:10px;
+  padding-top:10px;
+  align-items:start;
+}
+.casino-router-main{
+  min-width:0;
+}
+.casino-router-main>[data-page-section]{
+  display:none!important;
+  min-width:0;
+}
+.casino-router-main>[data-page-section].page-active{
+  display:block!important;
+}
+.persistent-left,
+.persistent-right{
+  min-width:0;
+}
+.live-bottom-ads{
+  width:100%;
+  margin-left:0;
+  margin-right:0;
+}
+.portal-page{
+  width:100%;
+  margin:0;
+  padding-top:0;
+}
+
+/* legacy full-page router rules no longer own the side rails */
+.casino-app-shell .v2-left,
+.casino-app-shell .v2-right{
+  display:flex;
+}
+@media(max-width:1500px){
+  .casino-app-shell{
+    grid-template-columns:190px minmax(0,1fr) 210px;
+    gap:8px;
+  }
+}
+@media(max-width:1050px){
+  .casino-app-shell{
+    grid-template-columns:175px minmax(0,1fr);
+  }
+  .casino-app-shell>.persistent-right{
+    display:none!important;
+  }
+}
+@media(max-width:760px){
+  .casino-app-shell{
+    display:block;
+    padding-top:6px;
+  }
+  .casino-app-shell>.persistent-left,
+  .casino-app-shell>.persistent-right{
+    display:none!important;
+  }
+  .live-bottom-ads{
+    grid-template-columns:repeat(2,1fr);
+    height:auto;
+  }
+}
