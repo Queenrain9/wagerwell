@@ -1919,3 +1919,20 @@ section.v2-bottom-ads[data-page-section].page-active{display:grid!important}
   .real-outside{grid-template-columns:repeat(3,1fr)}
   .slot-paytable-real{grid-template-columns:1fr}
 }
+
+
+/* v1.7 — external provider game shell */
+.external-game-shell{
+  width:100%;
+  min-height:70vh;
+  background:#03070b;
+  border:1px solid #30465a;
+  box-shadow:inset 0 0 30px #000;
+}
+.external-game-shell iframe{
+  display:block;
+  width:100%;
+  height:76vh;
+  border:0;
+  background:#03070b;
+}
