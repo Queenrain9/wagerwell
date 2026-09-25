@@ -1,7 +1,7 @@
 "use strict";
 (function(){
 const KEY="wagerwell-demo-v1";
-const UNIT=100;const toUnit=n=>Math.max(0,Math.round(Number(n)||0));const fmt=n=>toUnit(n).toLocaleString("ko-KR");
+const UNIT=100;const toUnit=n=>Math.round(Number(n)||0);const fmt=n=>toUnit(n).toLocaleString("ko-KR");
 const causes=[
 {id:0,emoji:"🐾",title:"보호소 겨울 담요",tag:"PROJECT 001 · ANIMAL CARE",target:50000,base:18000,style:"a",desc:"유기동물 보호소에 겨울 담요를 마련하는 프로젝트. 코인이 모일수록 보호소가 더 따뜻해집니다."},
 {id:1,emoji:"🍱",title:"따뜻한 한 끼 500인분",tag:"PROJECT 002 · MEAL SUPPORT",target:75000,base:31000,style:"b",desc:"따뜻한 한 끼를 채우는 금일 집중지원 프로젝트."},
